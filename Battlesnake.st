@@ -1,987 +1,2179 @@
-<?xml version="1.0"?>
-
-<st-source>
-<time-stamp>From VisualWorks®, Pre-Release 8.2 (feb16.1) of 5 February, 2016 on 18 February, 2016 at 6:41:52 PM</time-stamp>
+'From VisualWorks®, 8.1 of 24 July, 2015 on 19 February, 2016 at 1:56:03 AM'!
 
 
-<component-created>
-<name>Battlesnake</name> <type>package</type>
-</component-created><!-- Package Battlesnake(0.0.23,jkott)= -->
+CodeComponent create: #package named: 'Battlesnake'!"Package Battlesnake(0.0.28,jkott)="!
 
 
-<component-property>
-<name>Battlesnake</name> <type>package</type>
-<property>prerequisiteParcels</property> <value>#(#('SiouX-Server' '') #('Xtreams-Transforms' '') #('AppeX-Core' '') #('SiouX-Tools' '') #('AppeX-Tools' ''))</value>
-</component-property>
+CodeComponent type: #package named: 'Battlesnake' property: #prerequisiteParcels value: #(#('SiouX-Server' '') #('Xtreams-Transforms' '') #('AppeX-Core' '') #('SiouX-Tools' '') #('AppeX-Tools' ''))!
 
-<component-property>
-<name>Battlesnake</name> <type>package</type>
-<property>developmentPrerequisites</property> <value>#(#(#any 'SiouX-Server' '') #(#any 'Xtreams-Transforms' '') #(#any 'AppeX-Core' '') #(#any 'SiouX-Tools' '') #(#any 'AppeX-Tools' ''))</value>
-</component-property>
+CodeComponent type: #package named: 'Battlesnake' property: #developmentPrerequisites value: #(#(#any 'SiouX-Server' '') #(#any 'Xtreams-Transforms' '') #(#any 'AppeX-Core' '') #(#any 'SiouX-Tools' '') #(#any 'AppeX-Tools' ''))!
 
-<component-property>
-<name>Battlesnake</name> <type>package</type>
-<property>prerequisiteDescriptions</property> <value>#(#(#name 'SiouX-Server' #componentType #bundle) #(#name 'Xtreams-Transforms' #componentType #package) #(#name 'AppeX-Core' #componentType #package) #(#name 'SiouX-Tools' #componentType #package) #(#name 'AppeX-Tools' #componentType #bundle))</value>
-</component-property>
+CodeComponent type: #package named: 'Battlesnake' property: #prerequisiteDescriptions value: #(#(#name 'SiouX-Server' #componentType #bundle) #(#name 'Xtreams-Transforms' #componentType #package) #(#name 'AppeX-Core' #componentType #package) #(#name 'SiouX-Tools' #componentType #package) #(#name 'AppeX-Tools' #componentType #bundle))!
 
-<name-space>
-<name>Battlesnake</name>
-<environment>Smalltalk</environment>
-<private>false</private>
-<imports>
+Smalltalk defineNameSpace: #Battlesnake
+	private: false
+	imports: '
 			private Core.*
-			</imports>
-<category></category>
-<attributes>
-<package>Battlesnake</package>
-</attributes>
-</name-space>
+			'
+	category: ''!
 
-<class>
-<name>TileContent</name>
-<environment>Battlesnake</environment>
-<super>Core.Object</super>
-<private>false</private>
-<indexed-type>none</indexed-type>
-<inst-vars>tile </inst-vars>
-<class-inst-vars></class-inst-vars>
-<imports>
+Smalltalk.Battlesnake defineClass: #TileContent
+	superclass: #{Core.Object}
+	indexedType: #none
+	private: false
+	instanceVariableNames: 'tile '
+	classInstanceVariableNames: ''
+	imports: '
 			Xtreams.*
-			</imports>
-<category></category>
-<attributes>
-<package>Battlesnake</package>
-</attributes>
-</class>
+			'
+	category: ''!
 
-<class>
-<name>SnakePart</name>
-<environment>Battlesnake</environment>
-<super>Battlesnake.TileContent</super>
-<private>false</private>
-<indexed-type>none</indexed-type>
-<inst-vars>snake nextSegment </inst-vars>
-<class-inst-vars></class-inst-vars>
-<imports></imports>
-<category></category>
-<attributes>
-<package>Battlesnake</package>
-</attributes>
-</class>
+Smalltalk.Battlesnake defineClass: #SnakePart
+	superclass: #{Battlesnake.TileContent}
+	indexedType: #none
+	private: false
+	instanceVariableNames: 'snake nextSegment '
+	classInstanceVariableNames: ''
+	imports: ''
+	category: ''!
 
-<class>
-<name>Head</name>
-<environment>Battlesnake</environment>
-<super>Battlesnake.SnakePart</super>
-<private>false</private>
-<indexed-type>none</indexed-type>
-<inst-vars></inst-vars>
-<class-inst-vars></class-inst-vars>
-<imports></imports>
-<category></category>
-<attributes>
-<package>Battlesnake</package>
-</attributes>
-</class>
+Smalltalk.Battlesnake defineClass: #Snake
+	superclass: #{Core.Object}
+	indexedType: #none
+	private: false
+	instanceVariableNames: 'head snakeName board segments liveStatus score color headUrl lastPosition '
+	classInstanceVariableNames: ''
+	imports: ''
+	category: ''!
 
-<class>
-<name>PathNode</name>
-<environment>Battlesnake</environment>
-<super>Core.Object</super>
-<private>false</private>
-<indexed-type>none</indexed-type>
-<inst-vars>tile gCost hCost parentNode distanceFromStart </inst-vars>
-<class-inst-vars></class-inst-vars>
-<imports></imports>
-<category></category>
-<attributes>
-<package>Battlesnake</package>
-</attributes>
-</class>
+Battlesnake.Snake comment:
+'Snake has not been commented.  The comment should state the purpose of the class and also explain any unobvious aspects of the implementation.
 
-<class>
-<name>TileStateChanged</name>
-<environment>Battlesnake</environment>
-<super>Core.Announcement</super>
-<private>false</private>
-<indexed-type>none</indexed-type>
-<inst-vars>tile </inst-vars>
-<class-inst-vars></class-inst-vars>
-<imports></imports>
-<category></category>
-<attributes>
-<package>Battlesnake</package>
-</attributes>
-</class>
+Instance Variables:
+	board	<AlphaCompositedImage | Board | FlowLine | FlowParagraph | FlowSegment | GraphicsMedium | Grid | Label | LayoutSizedOrigin | OrderedDither | PixelArray | RasterOp | Rectangle | SimpleStringLabel | TextLines | WindowOpenPositionToolModel>	description of board
+	bubble	<Collection>	description of bubble
+	head	<AbstractBinaryObjectStorage | BoardTile | ByteCodeStream | DatabaseField | EncodedStream | GenericSettingDescriptor | MenuItem | MenuItemInsertion | NullStream | PathNode | PositionableStream | PostgresLOB | ProgressWidgetSpec | RBErrorAction | ReadStream | RectangleEdge | SettingsManagerPage | StandardIOStream | SyntaxErrorException | TextCollector | TileContent | UnsupportedCharacterError | WriteStream>	description of head
+	segments	<SequenceableCollection>	description of segments
+	snakeName	<JavascriptCode | MessageForwarder | Object | ProtoObject | ProtoObject>	description of snakeName
 
-<class>
-<name>Snake</name>
-<environment>Battlesnake</environment>
-<super>Core.Object</super>
-<private>false</private>
-<indexed-type>none</indexed-type>
-<inst-vars>head snakeName board segments liveStatus score color headUrl </inst-vars>
-<class-inst-vars></class-inst-vars>
-<imports></imports>
-<category></category>
-<attributes>
-<package>Battlesnake</package>
-</attributes>
-</class>
+Strategy:
+1) Receive board state
+2) Parse the board for food and snakes (boardtile with boardtile contents, and snake objects)
+3) Slither:
+Do I have a path?
+	ifTrue:[
+		Has the path changed?
+		ifTrue:[Snake findPathTo: (Snake findTarget).]	
+			
+	]
+	ifFalse:[Snake findPathTo: (Snake findTarget).
+	]
+	Snake move - moves to first tile in path instance variable, and decreases path to move first tile.
 
-<comment>
-<class-id>Battlesnake.Snake</class-id>
-<body>Snake has not been commented.  The comment should state the purpose of the class and also explain any unobvious aspects of the implementation.Instance Variables:	board	&lt;AlphaCompositedImage | Board | FlowLine | FlowParagraph | FlowSegment | GraphicsMedium | Grid | Label | LayoutSizedOrigin | OrderedDither | PixelArray | RasterOp | Rectangle | SimpleStringLabel | TextLines | WindowOpenPositionToolModel&gt;	description of board	bubble	&lt;Collection&gt;	description of bubble	head	&lt;AbstractBinaryObjectStorage | BoardTile | ByteCodeStream | DatabaseField | EncodedStream | GenericSettingDescriptor | MenuItem | MenuItemInsertion | NullStream | PathNode | PositionableStream | PostgresLOB | ProgressWidgetSpec | RBErrorAction | ReadStream | RectangleEdge | SettingsManagerPage | StandardIOStream | SyntaxErrorException | TextCollector | TileContent | UnsupportedCharacterError | WriteStream&gt;	description of head	segments	&lt;SequenceableCollection&gt;	description of segments	snakeName	&lt;JavascriptCode | MessageForwarder | Object | ProtoObject | ProtoObject&gt;	description of snakeNameStrategy:1) Receive board state2) Parse the board for food and snakes (boardtile with boardtile contents, and snake objects)3) Slither:Do I have a path?	ifTrue:[		Has the path changed?		ifTrue:[Snake findPathTo: (Snake findTarget).]					]	ifFalse:[Snake findPathTo: (Snake findTarget).	]	Snake move - moves to first tile in path instance variable, and decreases path to move first tile.Method: slither - returns selfMethod: findTarget - returns a tile	calls methods:	- findFoodTile - returns foodTile or nil	- findSmallsnakeTile - returns tile or nil	- runAwayFrom:aTile - returns safetyTile or nil	- findPerimeter - return clear wall tile on farthest wall (if width is &gt; 50% of width of board) or nearest wall (remember bubble tiles!)Method: findPathTo: aTile -- returns a pathMethod: snake move -- returns selfInstance variable: addWiggle(boolean) - adds additional tiles to your path</body>
-</comment>
+Method: slither - returns self
+Method: findTarget - returns a tile
+	calls methods:
+	- findFoodTile - returns foodTile or nil
+	- findSmallsnakeTile - returns tile or nil
+	- runAwayFrom:aTile - returns safetyTile or nil
+	- findPerimeter - return clear wall tile on farthest wall (if width is > 50% of width of board) or nearest wall (remember bubble tiles!!)
+Method: findPathTo: aTile -- returns a path
+Method: snake move -- returns self
+Instance variable: addWiggle(boolean) - adds additional tiles to your path'!
 
-<class>
-<name>Game</name>
-<environment>Battlesnake</environment>
-<super>Core.Object</super>
-<private>false</private>
-<indexed-type>none</indexed-type>
-<inst-vars>board medusa gameName turn </inst-vars>
-<class-inst-vars></class-inst-vars>
-<imports>
-			Xtreams
-			</imports>
-<category></category>
-<attributes>
-<package>Battlesnake</package>
-</attributes>
-</class>
+Smalltalk.Battlesnake defineClass: #Medusa
+	superclass: #{Battlesnake.Snake}
+	indexedType: #none
+	private: false
+	instanceVariableNames: 'behaviors path bubble target nextMove currentBehavior '
+	classInstanceVariableNames: ''
+	imports: ''
+	category: ''!
 
-<class>
-<name>BoardTile</name>
-<environment>Battlesnake</environment>
-<super>Core.Announcer</super>
-<private>false</private>
-<indexed-type>none</indexed-type>
-<inst-vars>north east south west neighbours position content board </inst-vars>
-<class-inst-vars></class-inst-vars>
-<imports></imports>
-<category></category>
-<attributes>
-<package>Battlesnake</package>
-</attributes>
-</class>
+Battlesnake.Medusa comment:
+'Medusa has not been commented.  The comment should state the purpose of the class and also explain any unobvious aspects of the implementation.
 
-<class>
-<name>Medusa</name>
-<environment>Battlesnake</environment>
-<super>Battlesnake.Snake</super>
-<private>false</private>
-<indexed-type>none</indexed-type>
-<inst-vars>strategies path bubble target </inst-vars>
-<class-inst-vars></class-inst-vars>
-<imports></imports>
-<category></category>
-<attributes>
-<package>Battlesnake</package>
-</attributes>
-</class>
+Instance Variables:
+	path	<OrderedCollection of <Tile>>	path I am about to take.
+	strategies	<OrderedCollection>	collection of blocks that when evaluated, will determine the next behaviour.
 
-<comment>
-<class-id>Battlesnake.Medusa</class-id>
-<body>Medusa has not been commented.  The comment should state the purpose of the class and also explain any unobvious aspects of the implementation.Instance Variables:	path	&lt;OrderedCollection of &lt;Tile&gt;&gt;	path I am about to take.	strategies	&lt;OrderedCollection&gt;	collection of blocks that when evaluated, will determine the next behaviour.</body>
-</comment>
 
-<class>
-<name>Board</name>
-<environment>Battlesnake</environment>
-<super>Core.Announcer</super>
-<private>false</private>
-<indexed-type>none</indexed-type>
-<inst-vars>rows snakes foods </inst-vars>
-<class-inst-vars></class-inst-vars>
-<imports>
+
+'!
+
+Smalltalk.Battlesnake defineClass: #Board
+	superclass: #{Core.Announcer}
+	indexedType: #none
+	private: false
+	instanceVariableNames: 'rows snakes foods '
+	classInstanceVariableNames: ''
+	imports: '
 			Xtreams.*
-			</imports>
-<category></category>
-<attributes>
-<package>Battlesnake</package>
-</attributes>
-</class>
+			'
+	category: ''!
 
-<class>
-<name>Body</name>
-<environment>Battlesnake</environment>
-<super>Battlesnake.SnakePart</super>
-<private>false</private>
-<indexed-type>none</indexed-type>
-<inst-vars>previousSegment </inst-vars>
-<class-inst-vars></class-inst-vars>
-<imports></imports>
-<category></category>
-<attributes>
-<package>Battlesnake</package>
-</attributes>
-</class>
+Smalltalk.Battlesnake defineClass: #Body
+	superclass: #{Battlesnake.SnakePart}
+	indexedType: #none
+	private: false
+	instanceVariableNames: 'previousSegment '
+	classInstanceVariableNames: ''
+	imports: ''
+	category: ''!
 
-<class>
-<name>WormHole</name>
-<environment>Battlesnake</environment>
-<super>AppeX.Application</super>
-<private>false</private>
-<indexed-type>none</indexed-type>
-<inst-vars></inst-vars>
-<class-inst-vars>activeGame </class-inst-vars>
-<imports>
+Smalltalk.Battlesnake defineClass: #TileStateChanged
+	superclass: #{Core.Announcement}
+	indexedType: #none
+	private: false
+	instanceVariableNames: 'tile '
+	classInstanceVariableNames: ''
+	imports: ''
+	category: ''!
+
+Smalltalk.Battlesnake defineClass: #Game
+	superclass: #{Core.Object}
+	indexedType: #none
+	private: false
+	instanceVariableNames: 'board medusa gameName turn '
+	classInstanceVariableNames: ''
+	imports: '
+			private Xtreams.*
+			'
+	category: ''!
+
+Smalltalk.Battlesnake defineClass: #Food
+	superclass: #{Battlesnake.TileContent}
+	indexedType: #none
+	private: false
+	instanceVariableNames: ''
+	classInstanceVariableNames: ''
+	imports: ''
+	category: ''!
+
+Smalltalk.Battlesnake defineClass: #WormHole
+	superclass: #{AppeX.Application}
+	indexedType: #none
+	private: false
+	instanceVariableNames: ''
+	classInstanceVariableNames: 'activeGame '
+	imports: '
 			private OS.*
 			private Xtreams.*
-			</imports>
-<category></category>
-<attributes>
-<package>Battlesnake</package>
-</attributes>
-</class>
+			'
+	category: ''!
 
-<class>
-<name>Food</name>
-<environment>Battlesnake</environment>
-<super>Battlesnake.TileContent</super>
-<private>false</private>
-<indexed-type>none</indexed-type>
-<inst-vars></inst-vars>
-<class-inst-vars></class-inst-vars>
-<imports></imports>
-<category></category>
-<attributes>
-<package>Battlesnake</package>
-</attributes>
-</class>
+Smalltalk.Battlesnake defineClass: #Head
+	superclass: #{Battlesnake.SnakePart}
+	indexedType: #none
+	private: false
+	instanceVariableNames: ''
+	classInstanceVariableNames: ''
+	imports: ''
+	category: ''!
 
-<methods>
-<class-id>Battlesnake.BoardTile class</class-id> <category>instance creation</category>
+Smalltalk.Battlesnake defineClass: #BoardTile
+	superclass: #{Core.Announcer}
+	indexedType: #none
+	private: false
+	instanceVariableNames: 'north east south west neighbours position content board '
+	classInstanceVariableNames: ''
+	imports: ''
+	category: ''!
 
-<body package="Battlesnake" selector="on:at:">on: aBoard at: aPosition	^ self new		board: aBoard;		position: aPosition;		yourself</body>
-</methods>
+Smalltalk.Battlesnake defineClass: #PathNode
+	superclass: #{Core.Object}
+	indexedType: #none
+	private: false
+	instanceVariableNames: 'tile gCost hCost parentNode distanceFromStart '
+	classInstanceVariableNames: ''
+	imports: ''
+	category: ''!
 
+Smalltalk.Battlesnake defineClass: #WormHoleClient
+	superclass: #{AppeX.ApplicationClient}
+	indexedType: #none
+	private: false
+	instanceVariableNames: ''
+	classInstanceVariableNames: ''
+	imports: ''
+	category: ''!
 
-<methods>
-<class-id>Battlesnake.BoardTile</class-id> <category>accessing</category>
+Smalltalk.Battlesnake defineSharedVariable: #Directions
+	private: false
+	constant: false
+	category: 'accessing'
+	initializer: 'Dictionary with: (0 @ -1) -> #up with: (0 @ 1) -> #down with: (-1 @ 0) -> #left with: (1 @ 0) -> #right'!
 
-<body package="Battlesnake" selector="x">x	^ position x</body>
 
-<body package="Battlesnake" selector="west">west	^west</body>
 
-<body package="Battlesnake" selector="east">east	^east</body>
+!Battlesnake.Snake class methodsFor: 'instance creation'!
 
-<body package="Battlesnake" selector="position">position	^position</body>
+on: aBoard
 
-<body package="Battlesnake" selector="tile">tile"	For polymorphic use of certain methods, I implement tile to return self."	^ self</body>
+	^ self new
+		board: aBoard;
+		yourself!
 
-<body package="Battlesnake" selector="east:">east: aTile	east == aTile ifTrue: [^self].	east := aTile.	aTile west: self</body>
+new
 
-<body package="Battlesnake" selector="highPassingCost">highPassingCost"	Answer a high number representing basically a non-passable content."	^ 16rFFFFFFF</body>
+	^ super new initialize! !
 
-<body package="Battlesnake" selector="board:">board: anObject	board := anObject</body>
 
-<body package="Battlesnake" selector="south:">south: aTile	south == aTile ifTrue: [ ^ self ].	south := aTile.	aTile north: self</body>
+!Battlesnake.Snake methodsFor: 'accessing'!
 
-<body package="Battlesnake" selector="probableCostIn:for:">probableCostIn: numberOfMoves for: aMedusa	| cost |	cost := 0.		self board snakes do: [ :eachSnake |		eachSnake == aMedusa ifFalse: [			(eachSnake head distanceTo: self) &lt; numberOfMoves ifTrue: [				]			].		].		cost</body>
+board
 
-<body package="Battlesnake" selector="y">y	^ position y</body>
+	^board!
 
-<body package="Battlesnake" selector="south">south	^south</body>
+appendBody: aBody
 
-<body package="Battlesnake" selector="north:">north: aTile	north == aTile ifTrue: [ ^ self ].	north := aTile.	aTile south: self</body>
+	| part |
+	part := segments last.
+	part nextSegment: aBody.
+	aBody previousSegment: part.
+	aBody snake: self.
+	segments add: aBody.!
 
-<body package="Battlesnake" selector="neighbours">neighbours	^ neighbours ifNil: [ neighbours := (Set new: 4)		add: north;		add: east;		add: south;		add: west;		yourself]</body>
+findPathTo: tileOrContent
 
-<body package="Battlesnake" selector="content">content		^ content</body>
+	^ head findPathTo: tileOrContent!
 
-<body package="Battlesnake" selector="content:">content: aTileContent	content == aTileContent ifTrue: [ ^ self ].	content ifNotNil: [		content isFood ifTrue: [ board removeFood: content ].		content tile: nil.		].	content := aTileContent.	content ifNotNil: [ content tile: self ].	self announce: (TileStateChanged on: self)</body>
+tile
+"
+	To ensure polymorphic calculations, we define the tile of a Snake as the tile occupied by its Head.
+"
 
-<body package="Battlesnake" selector="position:">position: aPoint	position := aPoint</body>
+	^ head tile!
 
-<body package="Battlesnake" selector="snake">snake	^ content ifNotNil: [ content snake ]</body>
+lastPosition
 
-<body package="Battlesnake" selector="west:">west: aTile	west == aTile ifTrue: [ ^ self ].	west := aTile.	aTile east: self</body>
+	^lastPosition!
 
-<body package="Battlesnake" selector="board">board	^board</body>
+closestFood
 
-<body package="Battlesnake" selector="passingCostIn:for:">passingCostIn: numberOfMoves for: aMedusa	self isTraversable ifTrue: [ ^ 0 ].	"Actually, this should be a probabilistic function of the distance of other snakes on board. "		"content must be a SnakePart. Determine its tailLength, and whether it's shorter than numberOfMoves."		^ (content tailLength &lt; numberOfMoves)		ifTrue: [ 0 ]		ifFalse: [ self highPassingCost ]</body>
+	^ head tile closestFood!
 
-<body package="Battlesnake" selector="north">north	^north</body>
+snakeName
 
-<body package="Battlesnake" selector="neighbourAt:">neighbourAt: offset	offset = (-1 @ 0) ifTrue: [^ west].	offset = (1 @ 0) ifTrue: [^ east].	offset = (0 @ -1) ifTrue: [^ north].	offset = (0 @ 1) ifTrue: [^ south].	^ nil</body>
-</methods>
+	^snakeName!
 
-<methods>
-<class-id>Battlesnake.BoardTile</class-id> <category>testing</category>
+board: aBoard
 
-<body package="Battlesnake" selector="isEmpty">isEmpty	^ content isNil</body>
+	board := aBoard!
 
-<body package="Battlesnake" selector="isTraversable">isTraversable	^ self isEmpty or: [content isObstacle not ]</body>
+ensurePartAt: index
 
-<body package="Battlesnake" selector="hasFood">hasFood	^ content notNil and: [ content isFood ]</body>
+	| part count |
+	segments size >= index ifTrue: [^segments at: index].
+	index = 1
+		ifTrue: 
+			[head ifNil: [self head: self newHead].
+			part := head]
+		ifFalse: 
+			[count := 1.
+			part := head.
+			[count < index] whileTrue: 
+					[part nextSegment ifNil: [self appendBody: self newBody].
+					part := part nextSegment.
+					count := count + 1]].
+	^part!
 
-<body package="Battlesnake" selector="isOccupiedBySnake">isOccupiedBySnake	^ content notNil and: [ content isSnakePart ]</body>
-</methods>
+position
 
-<methods>
-<class-id>Battlesnake.BoardTile</class-id> <category>finding items</category>
+	^ head position!
 
-<body package="Battlesnake" selector="closestSnake">closestSnake	^ self		closestOf: board snakes		sortedBy: [ :eachSnake | self distanceTo: eachSnake ]</body>
+distanceTo: contentOrTile
 
-<body package="Battlesnake" selector="closestEdgeTile">closestEdgeTile	| corner rectangle |	corner := self closestCorner.	rectangle :=self position corner: corner position.		^ rectangle width abs &gt;= rectangle height abs		ifTrue: [board at: self x @ corner y ]		ifFalse: [board at: corner x @ self y ].</body>
+	^ (contentOrTile position - self position) battlesnakeDistance!
 
-<body package="Battlesnake" selector="farthestEdgeTile">farthestEdgeTile	| corner rectangle |	corner := self farthestCorner.	rectangle :=self position corner: corner position.		^ rectangle width abs &lt; rectangle height abs		ifTrue: [board at: self x @ corner y ]		ifFalse: [board at: corner x @ self y ].</body>
+occupiedTiles
+"
+	Answer a collection of tiles that my body occupies.
+"
 
-<body package="Battlesnake" selector="closestSnakeByPath">closestSnakeByPath	^ self		closestOf: board snakes		sortedBy: [ :eachSnake | self pathDistanceTo: eachSnake ]</body>
+	^ self segments collect: #tile!
 
-<body package="Battlesnake" selector="closestOf:sortedBy:">closestOf: items sortedBy: aBlock"	Answer the closest of the items where aBlock determines which distance we use."	items isEmpty ifTrue: [ ^ nil ].		^ (board sortItems: items by: aBlock) first</body>
+tail
 
-<body package="Battlesnake" selector="closestCornerByPath">closestCornerByPath	^ self		closestOf: board cornerTiles		sortedBy: [ :eachTile | self pathDistanceTo: eachTile ]</body>
+	^ head
+		ifNil: [ nil ]
+		ifNotNil: [ self segments last ]!
 
-<body package="Battlesnake" selector="closestCorner">closestCorner	^ self		closestOf: board cornerTiles		sortedBy: [ :eachTile | self distanceTo: eachTile ]</body>
+segments
 
-<body package="Battlesnake" selector="farthestOf:sortedBy:">farthestOf: items sortedBy: aBlock"	Answer the farthest of the items where aBlock determines which distance we use."	items isEmpty ifTrue: [ ^ nil ].		^ (board sortItems: items by: aBlock) last</body>
+	| answer part |
+	part := head.
+	answer := OrderedCollection new.
+	[ part notNil ] whileTrue: [
+		answer add: part.
+		part := part nextSegment.
+		].
 
-<body package="Battlesnake" selector="farthestCorner">farthestCorner	^ self		farthestOf: board cornerTiles		sortedBy: [ :eachTile | self distanceTo: eachTile ]</body>
+	^answer!
 
-<body package="Battlesnake" selector="closestFood">closestFood	^ self		closestOf: board foods		sortedBy: [ :eachFood | self distanceTo: eachFood ]</body>
+lastPosition: aTile
 
-<body package="Battlesnake" selector="closestFoodByPath">closestFoodByPath	^ self		closestOf: board foods		sortedBy: [ :eachFood | self pathDistanceTo: eachFood ]</body>
-</methods>
+	lastPosition := aTile!
 
-<methods>
-<class-id>Battlesnake.BoardTile</class-id> <category>path finding</category>
+newBody
 
-<body package="Battlesnake" selector="findPathTo:">findPathTo: targetTile"	Answer a collection of tiles leading to the targetTile. Do not include myself in the path.	OPEN - the set of nodes to be evaluated	CLOSED - set of nodes already evaluated	add the start node (representing myself) to the OPEN set"	| open closed nodes path current neighbourAtTile updateCosts updateNodeAtTile  currentNeighbours |		open := SortedCollection sortBlock: [ :a :b | a fCost &lt;= b fCost ].	closed := Set new.	nodes := IdentityDictionary new. "Keep a map between tiles and nodes so the nodes can be revisited."	path := OrderedCollection new.	updateCosts := [ :node |		node targetDistance: (targetTile position - node tile position) battlesnakeDistance.		(open includes: node) ifTrue: [ open reSort ].		].		neighbourAtTile := [ :tile |		nodes at: tile ifAbsentPut: [			| node |			node := PathNode on: tile.			updateCosts value: node.			node			]		].		updateNodeAtTile := [ :tile |		| node |		node := neighbourAtTile value: tile.		updateCosts value: node.		node		].		current := updateNodeAtTile value: self.	open add: current.		"	loop		current = node in OPEN with the lowest f_cost		remove current from OPEN		add current to CLOSED			"	[open isEmpty] whileFalse: [		current := open removeFirst.		closed add: current.		"		if current is the target node			return				"		current tile == targetTile ifTrue: [			[ current notNil ] whileTrue: [				path add: current.				current := current parentNode.				].			^ (path reverse collect: #tile)				removeFirst;	"That's me!"				yourself			].		"		for each neighbour of the current node			if neighbour is in CLOSED or neighbour is not traversable				skip to the next neighbour		"		currentNeighbours := current tile neighbours sorted: [ :a :b |			(targetTile position - a position) battlesnakeDistance &lt;= (targetTile position - b position) battlesnakeDistance			].		currentNeighbours do: [ :eachNeighbour |			| node |			node := neighbourAtTile value: eachNeighbour.			 ((closed includes: node) or: [ eachNeighbour isTraversable not]) ifFalse: [				"				if new path to neighbour is shorter or neighbour is not in OPEN					set fCost of neighbour					set parent of neighbour to current					if neighbour is not in OPEN						add neighbour to OPEN				"				| oldGCost newGCost notInOpen|								oldGCost := node gCost.				updateCosts value: node.				newGCost := node gCost.				notInOpen := (open includes: node) not.				(newGCost &lt; oldGCost or: [ notInOpen]) ifTrue: [					node   parentNode: current.					notInOpen ifTrue: [						open add: node.						]					]				]			]		].	"If I got here there is no path to targetTile. Return nil."	^ nil</body>
+	^Body new!
 
-<body package="Battlesnake" selector="simplePathTo:">simplePathTo: targetTile"	Find which of the x,y deltas is larger, and add nodes along that axis before adding nodes along the other axis."	| path rectangle long short current corner |		path := OrderedCollection new: (self distanceTo: targetTile) + 1.	rectangle := self position corner: targetTile position.	rectangle width abs &gt;= rectangle height abs		ifTrue: [			long := rectangle width @ 0.			short := 0 @ rectangle height ]		ifFalse: [			short := rectangle width @ 0.			long := 0 @ rectangle height ].	corner := self position + long.	long := long x sign @ long y sign.	short := short x sign @ short y sign.	current := self.	(Array with: corner -&gt; long with: targetTile position -&gt; short) do: [ :cornerOffset |		| nextCorner offset |		nextCorner := cornerOffset key.		offset := cornerOffset value.		[ current position = nextCorner ] whileFalse: [			current := current neighbourAt: offset.			path add: current]		].	^path</body>
-</methods>
+newHead
 
-<methods>
-<class-id>Battlesnake.BoardTile</class-id> <category>initialize-release</category>
+	^Head new!
 
-<body package="Battlesnake" selector="initialize">initialize	"Initialize a newly created instance. This method must answer the receiver."	super initialize.	^self</body>
-</methods>
+power
 
-<methods>
-<class-id>Battlesnake.BoardTile</class-id> <category>measuring</category>
+	^ self segments size!
 
-<body package="Battlesnake" selector="areaWithinDistance:">areaWithinDistance: distance"	Answer the number of tiles possible occupied within distance.	The number of unique tiles that has a NY distance given by distance.	Examples:		BoardTile new areaWithinDistance: 1.		BoardTile new areaWithinDistance: 2.		BoardTile new areaWithinDistance: 3.		BoardTile new areaWithinDistance: 10."	^ 2 * distance * (distance + 1)</body>
+head
 
-<body package="Battlesnake" selector="tilesWithinDistance:">tilesWithinDistance: distance""	| xMin xMax yMin yMax tiles  |		tiles := Set new: (self areaWithinDistance: distance).		xMin := (position x - distance) max: 0.	xMax := (position x + distance) min: board width - 1.	yMin := (position y - distance) max: 0.	yMax := (position y + distance) min: board height - 1.		xMin to: xMax do: [ :x |		| yFrom yTo xOffset |		xOffset := x - position x.		yFrom := position y - distance + xOffset abs.		yTo := position y + distance - xOffset abs.		yFrom := yFrom max: yMin.		yTo := yTo min: yMax.		yFrom to: yTo do: [ :y |			tiles add: (board at: (x @ y))			]		].		^ tiles</body>
+	^head!
 
-<body package="Battlesnake" selector="distanceTo:">distanceTo: contentOrTile	^ (contentOrTile position - self position) battlesnakeDistance</body>
+closestSnake
 
-<body package="Battlesnake" selector="pathDistanceTo:">pathDistanceTo: contentOrTile	^ self pathDistanceTo: content using: [self findPathTo: contentOrTile]</body>
+	^ head tile closestSnake!
 
-<body package="Battlesnake" selector="pathDistanceTo:using:">pathDistanceTo: aTileOrContent using: aBlock	^ (aBlock value: aTileOrContent) ifNotNil: [: path | path size ]</body>
-</methods>
+head: aHead
 
-<methods>
-<class-id>Battlesnake.BoardTile</class-id> <category>printing</category>
+	head := aHead.
+	aHead snake: self.
+	segments := OrderedCollection with: head.!
 
-<body package="Battlesnake" selector="printOn:">printOn: aStream	aStream nextPutAll: self jsonState</body>
-</methods>
+snakeName: anObject
 
-<methods>
-<class-id>Battlesnake.BoardTile</class-id> <category>converting</category>
+	snakeName := anObject!
 
-<body package="Battlesnake" selector="asDictionary">asDictionary	| dict |	dict := Dictionary new.	dict at: #state put: self state.	self snake ifNotNil: [ dict at: #snake put: self snake snakeName ].		^ dict</body>
-</methods>
+coordinates: anArray
+"
+	anArray will contain #(x, y) arrays representing the tile on which
+	individual snake segments lie.
+"
 
-<methods>
-<class-id>Battlesnake.BoardTile</class-id> <category>accessing state</category>
+	self updateSegmentsFrom: (anArray collect: [ :each | each first @ each last])!
 
-<body package="Battlesnake" selector="state">state	| state |		state := Dictionary with: (#xy -&gt; (Array with: self x with: self y)).		content		ifNil: [ state add: #state -&gt; 'empty']		ifNotNil: [ state addAll: content state ].		^ state</body>
+tilesWithinDistance: distance
 
-<body package="Battlesnake" selector="jsonState">jsonState	^ Game jsonEncode: self state</body>
-</methods>
+	^ head tilesWithinDistance: distance! !
 
+!Battlesnake.Snake methodsFor: 'testing'!
 
-<methods>
-<class-id>Battlesnake.TileStateChanged class</class-id> <category>instance creation</category>
+shouldRunFrom: anotherSnake
 
-<body package="Battlesnake" selector="on:">on: aTile	^ self new		tile: aTile;		yourself</body>
-</methods>
+	^ (self canHunt: anotherSnake) not!
 
+canHunt: anotherSnake
 
-<methods>
-<class-id>Battlesnake.TileStateChanged</class-id> <category>accessing</category>
+	^ self power > anotherSnake power! !
 
-<body package="Battlesnake" selector="tile">tile	^tile</body>
+!Battlesnake.Snake methodsFor: 'actions'!
 
-<body package="Battlesnake" selector="tile:">tile: anObject	tile := anObject</body>
-</methods>
+updateSegmentsFrom: points
+"
+"
 
+	| length |
+	length := points size.
+	1 to: length do: [ :index |
+		| part |
+		part := self ensurePartAt: index.
+		index = length ifTrue: [
+			"This part is the tail. Before setting it on a new tile, clear the old tile so it's now empty."
+			part tile ifNotNil: [ :tile | tile contents: nil ]
+			].
+		(board at: (points at: index)) content: part]!
 
-<methods>
-<class-id>Battlesnake.TileContent class</class-id> <category>instance creation</category>
+resetBubble
+"
+	Ordinary snakes don't have bubble, do nothing.
+"! !
 
-<body package="Battlesnake" selector="on:">on: aTile	^ self new		tile: aTile;		yourself</body>
-</methods>
+!Battlesnake.Snake methodsFor: 'initialize-release'!
 
+initialize
 
-<methods>
-<class-id>Battlesnake.TileContent</class-id> <category>accessing</category>
+	super initialize.
+	segments := OrderedCollection new.
+	liveStatus := 'alive'.
+	score := 0.
+	color := "Graphics.ColorValue red" '#ff0000'.
+	headUrl := 'http://head.some-snake.example/head.png'.! !
 
-<body package="Battlesnake" selector="tile:">tile: anObject	tile := anObject</body>
+!Battlesnake.Snake methodsFor: 'printing'!
 
-<body package="Battlesnake" selector="y">y	^ tile y</body>
+printOn: aStream
 
-<body package="Battlesnake" selector="snake">snake	^ nil</body>
+	aStream nextPutAll: self jsonState! !
 
-<body package="Battlesnake" selector="tilesWithinDistance:">tilesWithinDistance: distance	^ tile tilesWithinDistance: distance</body>
+!Battlesnake.Snake methodsFor: 'accessing state'!
 
-<body package="Battlesnake" selector="distanceTo:">distanceTo: contentOrTile	^ (contentOrTile position - self position) battlesnakeDistance</body>
+jsonState
 
-<body package="Battlesnake" selector="findPathTo:">findPathTo: tileOrContent	^ tile findPathTo: tileOrContent tile</body>
+	^ Game jsonEncode: self state!
 
-<body package="Battlesnake" selector="tile">tile	^tile</body>
+state
 
-<body package="Battlesnake" selector="neighbours">neighbours	^ tile neighbours</body>
+	^ Dictionary new
+		at: #name put: self snakeName;
+		at: #state put: liveStatus;
+		at: #coords put: (self segments collect: [:each | Array with: each x with: each y]);
+		at: #score put: score;
+		at: #color put: color;
+		at: #head_url put: headUrl;
+		at: #taunt put: self taunt;
+		yourself!
 
-<body package="Battlesnake" selector="position">position	^ tile ifNotNil: [tile position]</body>
+taunt
+"
+	Answer a taunt. This still needs to be implemented.
+"
 
-<body package="Battlesnake" selector="x">x	^ tile x</body>
-</methods>
+	^'Taunts need to be implemented'! !
 
-<methods>
-<class-id>Battlesnake.TileContent</class-id> <category>accessing state</category>
 
-<body package="Battlesnake" selector="stateDescription">stateDescription	^ self subclassResponsibility</body>
+!Battlesnake.TileContent class methodsFor: 'instance creation'!
 
-<body package="Battlesnake" selector="jsonState">jsonState	^ JSON encode: self state</body>
+on: aTile
 
-<body package="Battlesnake" selector="state">state	^ Dictionary with: #state -&gt; self stateDescription</body>
-</methods>
+	^ self new
+		tile: aTile;
+		yourself! !
 
-<methods>
-<class-id>Battlesnake.TileContent</class-id> <category>testing</category>
 
-<body package="Battlesnake" selector="isSnakeBody">isSnakeBody	^ false</body>
+!Battlesnake.TileContent methodsFor: 'accessing'!
 
-<body package="Battlesnake" selector="isSnakePart">isSnakePart	^ false</body>
+tile
 
-<body package="Battlesnake" selector="isObstacle">isObstacle	^ true</body>
+	^tile!
 
-<body package="Battlesnake" selector="isFood">isFood	^ false</body>
+tilesWithinDistance: distance
 
-<body package="Battlesnake" selector="isSnakeHead">isSnakeHead	^ false</body>
-</methods>
+	^ tile tilesWithinDistance: distance!
 
-<methods>
-<class-id>Battlesnake.TileContent</class-id> <category>printing</category>
+findPathTo: tileOrContent
 
-<body package="Battlesnake" selector="printOn:">printOn: aStream	aStream nextPutAll: self jsonState</body>
-</methods>
+	^ tile findPathTo: tileOrContent!
 
+y
 
-<methods>
-<class-id>Battlesnake.SnakePart</class-id> <category>accessing</category>
+	^ tile y!
 
-<body package="Battlesnake" selector="nextSegment:">nextSegment: anObject	nextSegment := anObject</body>
+neighbours
 
-<body package="Battlesnake" selector="nextSegment">nextSegment	^nextSegment</body>
+	^ tile neighbours!
 
-<body package="Battlesnake" selector="snake:">snake: anObject	snake := anObject</body>
+snake
 
-<body package="Battlesnake" selector="tailLength">tailLength"	The distance from here to the last segment of the Snake.	This will change every time a segment is appended to the snake."	| tailLength segment |	tailLength := 0.	segment := self.	[(segment := segment nextSegment) isNil] whileFalse: [		tailLength := tailLength + 1.		].	^ tailLength</body>
+	^ nil!
 
-<body package="Battlesnake" selector="tile:">tile: aTile	super tile: aTile.	snake resetBubble</body>
+closestSnake
 
-<body package="Battlesnake" selector="snake">snake	^snake</body>
+	^ tile closestSnake!
 
-<body package="Battlesnake" selector="previous">previous	^ nil</body>
-</methods>
+position
 
-<methods>
-<class-id>Battlesnake.SnakePart</class-id> <category>accessing state</category>
+	^ tile ifNotNil: [tile position]!
 
-<body package="Battlesnake" selector="state">state	^ super state		at: #snake put: snake snakeName;		yourself</body>
-</methods>
+x
 
-<methods>
-<class-id>Battlesnake.SnakePart</class-id> <category>testing</category>
+	^ tile x!
 
-<body package="Battlesnake" selector="isSnakePart">isSnakePart	^ true</body>
-</methods>
+distanceTo: contentOrTile
 
+	^ (contentOrTile position - self position) battlesnakeDistance!
 
-<methods>
-<class-id>Battlesnake.Body</class-id> <category>accessing</category>
+tile: aTile
 
-<body package="Battlesnake" selector="previousSegment:">previousSegment: anObject	previousSegment := anObject</body>
+	tile := aTile! !
 
-<body package="Battlesnake" selector="previousSegment">previousSegment	^previousSegment</body>
-</methods>
+!Battlesnake.TileContent methodsFor: 'accessing state'!
 
-<methods>
-<class-id>Battlesnake.Body</class-id> <category>accessing state</category>
+jsonState
 
-<body package="Battlesnake" selector="stateDescription">stateDescription	^ 'body'</body>
-</methods>
+	^ JSON encode: self state!
 
-<methods>
-<class-id>Battlesnake.Body</class-id> <category>testing</category>
+stateDescription
 
-<body package="Battlesnake" selector="isSnakeBody">isSnakeBody	^ true</body>
-</methods>
+	^ self subclassResponsibility!
 
+state
 
-<methods>
-<class-id>Battlesnake.PathNode class</class-id> <category>instance creation</category>
+	^ Dictionary with: #state -> self stateDescription! !
 
-<body package="Battlesnake" selector="new">new	^ super new initialize</body>
+!Battlesnake.TileContent methodsFor: 'testing'!
 
-<body package="Battlesnake" selector="on:">on: aTile	^ self new		tile: aTile;		yourself</body>
-</methods>
+isSnakePart
 
+	^ false!
 
-<methods>
-<class-id>Battlesnake.PathNode</class-id> <category>accessing</category>
+isSnakeHead
 
-<body package="Battlesnake" selector="tile">tile	^tile</body>
+	^ false!
 
-<body package="Battlesnake" selector="position">position	^ tile position</body>
+isObstacle
 
-<body package="Battlesnake" selector="fCost">fCost	^ self gCost + self hCost</body>
+	^ true!
 
-<body package="Battlesnake" selector="distanceFromStart">distanceFromStart"	Once a Node has a parentNode, it's distanceFromStart needs to be calculated only once."	^ distanceFromStart ifNil: [		| currentNode |			distanceFromStart := 0.		currentNode := self.		[currentNode notNil] whileTrue: [			distanceFromStart := distanceFromStart + 1.			currentNode := currentNode parentNode			].		distanceFromStart ]</body>
+isFood
 
-<body package="Battlesnake" selector="targetDistance:">targetDistance: distance"	distance is an Integer representing minimum number of steps to a target."	hCost := distance * self stepCost</body>
+	^ false!
 
-<body package="Battlesnake" selector="tile:">tile: anObject	tile := anObject</body>
+isSnakeBody
 
-<body package="Battlesnake" selector="hCost">hCost	^hCost</body>
+	^ false! !
 
-<body package="Battlesnake" selector="parentNode">parentNode	^parentNode</body>
+!Battlesnake.TileContent methodsFor: 'printing'!
 
-<body package="Battlesnake" selector="parentNode:">parentNode: anObject	parentNode := anObject</body>
+printOn: aStream
 
-<body package="Battlesnake" selector="distanceTo:">distanceTo: anotherNode	| offset |		offset := (anotherNode position - self position) abs.	"We can only make rectangular moves. If we were able to move diagonally, we'd have to use pythagorean theorem to calculate	the diagonal distances."	^ offset x + offset y</body>
+	aStream nextPutAll: self jsonState! !
 
-<body package="Battlesnake" selector="stepCost">stepCost"	Answer how much it costs us to make a step. Let's use 100 because it's such a nice round number."	^ 100</body>
 
-<body package="Battlesnake" selector="gCost">gCost"	If it hasn't been calculated yet, determine gCost as the product of my distance from the start of the path	(the first node in the linked list) and a cost associated with a single step."	^gCost ifNil: [ gCost := self distanceFromStart * self stepCost ]</body>
-</methods>
+!Battlesnake.Game class methodsFor: 'encoding'!
 
-<methods>
-<class-id>Battlesnake.PathNode</class-id> <category>printing</category>
+jsonEncode: state
 
-<body package="Battlesnake" selector="printOn:">printOn: aStream	super printOn: aStream.	aStream nextPut: $(.	self position printOn: aStream.	aStream nextPut: $).</body>
-</methods>
+	^ Xtreams.JSON encode: state! !
 
-<methods>
-<class-id>Battlesnake.PathNode</class-id> <category>initialize-release</category>
+!Battlesnake.Game class methodsFor: 'instance creation'!
 
-<body package="Battlesnake" selector="initialize">initialize	super initialize.		gCost := hCost := 0.</body>
-</methods>
+fromState: state
+"
+"
+	| width height |
+	
+	width := (state at: #width) asNumber.
+	height := (state at: #height) asNumber.
+	
+	^ self new
+		board: (Board width: width height: height);
+		gameName: (state at: #game_id);
+		breedMedusa;
+		yourself! !
 
 
-<methods>
-<class-id>Battlesnake.Snake class</class-id> <category>instance creation</category>
+!Battlesnake.Game methodsFor: 'accessing'!
 
-<body package="Battlesnake" selector="on:">on: aBoard	^ self new		board: aBoard;		yourself</body>
+turn
 
-<body package="Battlesnake" selector="new">new	^ super new initialize</body>
-</methods>
+	^turn!
 
+snakes
 
-<methods>
-<class-id>Battlesnake.Snake</class-id> <category>accessing</category>
+	^ board snakes!
 
-<body package="Battlesnake" selector="occupiedTiles">occupiedTiles"	Answer a collection of tiles that my body occupies."	^ self segments collect: #tile</body>
+board
 
-<body package="Battlesnake" selector="power">power	^ self segments size</body>
+	^board!
 
-<body package="Battlesnake" selector="appendBody:">appendBody: aBody	| part |	part := segments last.	part nextSegment: aBody.	aBody previousSegment: part.	aBody snake: self.	segments add: aBody.</body>
+gameName: aString
 
-<body package="Battlesnake" selector="snakeName:">snakeName: anObject	snakeName := anObject</body>
+	gameName := aString!
 
-<body package="Battlesnake" selector="board">board	^board</body>
+medusa
 
-<body package="Battlesnake" selector="tilesWithinDistance:">tilesWithinDistance: distance	^ head tilesWithinDistance: distance</body>
+	^medusa!
 
-<body package="Battlesnake" selector="head:">head: aHead	head := aHead.	aHead snake: self.	segments := OrderedCollection with: head.</body>
+board: aBoard
 
-<body package="Battlesnake" selector="ensurePartAt:">ensurePartAt: index	| part count |	segments size &gt;= index ifTrue: [^segments at: index].	index = 1		ifTrue: 			[head ifNil: [self head: self newHead].			part := head]		ifFalse: 			[count := 1.			part := head.			[count &lt; index] whileTrue: 					[part nextSegment ifNil: [self appendBody: self newBody].					part := part nextSegment.					count := count + 1]].	^part</body>
+	board := aBoard!
 
-<body package="Battlesnake" selector="position">position	^ head position</body>
+foods
 
-<body package="Battlesnake" selector="tile">tile"	To ensure polymorphic calculations, we define the tile of a Snake as the tile occupied by its Head."	^ head tile</body>
+	^board foods!
 
-<body package="Battlesnake" selector="tail">tail	^ head		ifNil: [ nil ]		ifNotNil: [ self segments last ]</body>
+gameName
 
-<body package="Battlesnake" selector="board:">board: aBoard	board := aBoard</body>
+	^gameName!
 
-<body package="Battlesnake" selector="snakeName">snakeName	^snakeName</body>
+turn: anObject
 
-<body package="Battlesnake" selector="coordinates:">coordinates: anArray"	anArray will contain #(x, y) arrays representing the tile on which	individual snake segments lie."	self updateSegmentsFrom: (anArray collect: [ :each | each first @ each last])</body>
+	turn := anObject! !
 
-<body package="Battlesnake" selector="segments">segments	| answer part |	part := head.	answer := OrderedCollection new.	[ part notNil ] whileTrue: [		answer add: part.		part := part nextSegment.		].	^answer</body>
+!Battlesnake.Game methodsFor: 'accessing state'!
 
-<body package="Battlesnake" selector="distanceTo:">distanceTo: contentOrTile	^ (contentOrTile position - self position) battlesnakeDistance</body>
+jsonState
 
-<body package="Battlesnake" selector="findPathTo:">findPathTo: tileOrContent	^ head findPathTo: tileOrContent tile</body>
 
-<body package="Battlesnake" selector="closestSnake">closestSnake	^ head tile closestSnake</body>
+		^ self class jsonEncode: self state!
 
-<body package="Battlesnake" selector="head">head	^head</body>
+state
 
-<body package="Battlesnake" selector="newHead">newHead	^Head new</body>
+	^ Dictionary new
+		at: #game_id put: gameName;
+		at: #turn put: turn;
+		at: #board put: board state;
+		at: #snakes put: (self snakes collect: #state);
+		at: #food put: (self foods values collect: [ :eachFood | Array with: eachFood x with: eachFood y]);
+		yourself! !
 
-<body package="Battlesnake" selector="closestFood">closestFood	^ head tile closestFood</body>
+!Battlesnake.Game methodsFor: 'printing'!
 
-<body package="Battlesnake" selector="newBody">newBody	^Body new</body>
-</methods>
+printOn: aStream
 
-<methods>
-<class-id>Battlesnake.Snake</class-id> <category>testing</category>
+	aStream nextPutAll: self jsonState! !
 
-<body package="Battlesnake" selector="canHunt:">canHunt: anotherSnake	^ self power &gt; anotherSnake power</body>
+!Battlesnake.Game methodsFor: 'actions'!
 
-<body package="Battlesnake" selector="shouldRunFrom:">shouldRunFrom: anotherSnake	^ (self canHunt: anotherSnake) not</body>
-</methods>
+medusa: aMedusa
 
-<methods>
-<class-id>Battlesnake.Snake</class-id> <category>actions</category>
+	medusa := aMedusa!
 
-<body package="Battlesnake" selector="updateSegmentsFrom:">updateSegmentsFrom: points""	| length |	length := points size.	1 to: length do: [ :index |		| part |		part := self ensurePartAt: index.		index = length ifTrue: [			part tile ifNotNil: [ :tile | tile contents: nil ]			].		(board at: (points at: index)) content: part]</body>
+breedMedusa
 
-<body package="Battlesnake" selector="resetBubble">resetBubble"	Ordinary snakes don't have bubble, do nothing."</body>
-</methods>
+	^ medusa := Medusa on: board.! !
 
-<methods>
-<class-id>Battlesnake.Snake</class-id> <category>initialize-release</category>
 
-<body package="Battlesnake" selector="initialize">initialize	super initialize.	segments := OrderedCollection new.	liveStatus := 'alive'.	score := 0.	color := "Graphics.ColorValue red" '#ff0000'.	headUrl := 'http://head.some-snake.example/head.png'.</body>
-</methods>
+!Battlesnake.SnakePart methodsFor: 'accessing'!
 
-<methods>
-<class-id>Battlesnake.Snake</class-id> <category>printing</category>
+tailLength
+"
+	The distance from here to the last segment of the Snake.
+	This will change every time a segment is appended to the snake.
+"
 
-<body package="Battlesnake" selector="printOn:">printOn: aStream	aStream nextPutAll: self jsonState</body>
-</methods>
+	| tailLength segment |
+	tailLength := 0.
+	segment := self.
+	[(segment := segment nextSegment) isNil] whileFalse: [
+		tailLength := tailLength + 1.
+		].
+	^ tailLength!
 
-<methods>
-<class-id>Battlesnake.Snake</class-id> <category>accessing state</category>
+tile: aTile
 
-<body package="Battlesnake" selector="jsonState">jsonState	^ Game jsonEncode: self state</body>
+	super tile: aTile.
+	snake resetBubble!
 
-<body package="Battlesnake" selector="state">state	^ Dictionary new		at: #name put: self snakeName;		at: #state put: liveStatus;		at: #coords put: (self segments collect: [:each | Array with: each x with: each y]);		at: #score put: score;		at: #color put: color;		at: #head_url put: headUrl;		at: #taunt put: self taunt;		yourself</body>
+snake: anObject
 
-<body package="Battlesnake" selector="taunt">taunt"	Answer a taunt. This still needs to be implemented."	^'Taunts need to be implemented'</body>
-</methods>
+	snake := anObject!
 
+snake
 
-<methods>
-<class-id>Battlesnake.Game class</class-id> <category>encoding</category>
+	^snake!
 
-<body package="Battlesnake" selector="jsonEncode:">jsonEncode: state	^ Xtreams.JSON encode: state</body>
-</methods>
+nextSegment: anObject
 
-<methods>
-<class-id>Battlesnake.Game class</class-id> <category>instance creation</category>
+	nextSegment := anObject!
 
-<body package="Battlesnake" selector="fromState:">fromState: state""	^ self new		board: (Board width: (state at: #width) height: (state at:#height));		gameName: (state at: #game_id);		breedMedusa;		yourself</body>
-</methods>
+nextSegment
 
+	^nextSegment!
 
-<methods>
-<class-id>Battlesnake.Game</class-id> <category>accessing</category>
+previous
 
-<body package="Battlesnake" selector="board:">board: aBoard	board := aBoard</body>
+	^ nil! !
 
-<body package="Battlesnake" selector="foods">foods	^board foods</body>
+!Battlesnake.SnakePart methodsFor: 'accessing state'!
 
-<body package="Battlesnake" selector="gameName">gameName	^gameName</body>
+state
 
-<body package="Battlesnake" selector="medusa">medusa	^medusa</body>
+	^ super state
+		at: #snake put: snake snakeName;
+		yourself! !
 
-<body package="Battlesnake" selector="snakes">snakes	^ board snakes</body>
+!Battlesnake.SnakePart methodsFor: 'testing'!
 
-<body package="Battlesnake" selector="board">board	^board</body>
+isSnakePart
 
-<body package="Battlesnake" selector="turn:">turn: anObject	turn := anObject</body>
+	^ true! !
 
-<body package="Battlesnake" selector="turn">turn	^turn</body>
 
-<body package="Battlesnake" selector="gameName:">gameName: aString	gameName := aString</body>
-</methods>
+!Battlesnake.Head methodsFor: 'accessing'!
 
-<methods>
-<class-id>Battlesnake.Game</class-id> <category>accessing state</category>
+probabilityOfReaching: aTile in: numberOfMoves
+"
+	Answer an integer that is used as the percent probablity that I will reach aTile in numberOfMoves.
+	This is only determined by the potential size of the area, not by presence of any content in the tiles,
+"
+	| distance area |
+	
+	distance := self distanceTo: aTile.
+	distance > numberOfMoves ifTrue: [ ^0 ].
+	
+	area := self areaWithinDistance: distance.
+	
+	^ (100 / area) rounded!
 
-<body package="Battlesnake" selector="jsonState">jsonState		^ self class jsonEncode: self state</body>
+areaWithinDistance: distance
 
-<body package="Battlesnake" selector="state">state	^ Dictionary new		at: #game_id put: gameName;		at: #turn put: turn;		at: #board put: board state;		at: #snakes put: (self snakes collect: #state);		at: #food put: (self foods values collect: [ :eachFood | Array with: eachFood x with: eachFood y]);		yourself</body>
-</methods>
+	^ tile areaWithinDistance: distance!
 
-<methods>
-<class-id>Battlesnake.Game</class-id> <category>printing</category>
+tile: aTile
 
-<body package="Battlesnake" selector="printOn:">printOn: aStream	aStream nextPutAll: self jsonState</body>
-</methods>
+	super tile: aTile.
+	snake lastPosition: aTile! !
 
-<methods>
-<class-id>Battlesnake.Game</class-id> <category>actions</category>
+!Battlesnake.Head methodsFor: 'accessing state'!
 
-<body package="Battlesnake" selector="breedMedusa">breedMedusa	^ medusa := Medusa on: board.</body>
-</methods>
+stateDescription
 
+	^ 'head'! !
 
-<methods>
-<class-id>Battlesnake.Head</class-id> <category>accessing</category>
+!Battlesnake.Head methodsFor: 'testing'!
 
-<body package="Battlesnake" selector="areaWithinDistance:">areaWithinDistance: distance	^ tile areaWithinDistance: distance</body>
+isSnakeHead
 
-<body package="Battlesnake" selector="probabilityOfReaching:in:">probabilityOfReaching: aTile in: numberOfMoves"	Answer an integer that is used as the percent probablity that I will reach aTile in numberOfMoves.	This is only determined by the potential size of the area, not by presence of any content in the tiles,"	| distance area |		distance := self distanceTo: aTile.	distance &gt; numberOfMoves ifTrue: [ ^0 ].		area := self areaWithinDistance: distance.		^ (100 / area) rounded</body>
-</methods>
+	^ true! !
 
-<methods>
-<class-id>Battlesnake.Head</class-id> <category>accessing state</category>
 
-<body package="Battlesnake" selector="stateDescription">stateDescription	^ 'head'</body>
-</methods>
+!Battlesnake.TileStateChanged class methodsFor: 'instance creation'!
 
-<methods>
-<class-id>Battlesnake.Head</class-id> <category>testing</category>
+on: aTile
 
-<body package="Battlesnake" selector="isSnakeHead">isSnakeHead	^ true</body>
-</methods>
+	^ self new
+		tile: aTile;
+		yourself! !
 
 
-<methods>
-<class-id>Battlesnake.Food</class-id> <category>testing</category>
+!Battlesnake.TileStateChanged methodsFor: 'accessing'!
 
-<body package="Battlesnake" selector="isObstacle">isObstacle	^ false</body>
+tile
 
-<body package="Battlesnake" selector="isFood">isFood	^ true</body>
-</methods>
+	^tile!
 
-<methods>
-<class-id>Battlesnake.Food</class-id> <category>accessing state</category>
+tile: anObject
 
-<body package="Battlesnake" selector="stateDescription">stateDescription	^ 'food'</body>
-</methods>
+	tile := anObject! !
 
 
-<methods>
-<class-id>Battlesnake.Board class</class-id> <category>instance creation</category>
+!Battlesnake.Food methodsFor: 'testing'!
 
-<body package="Battlesnake" selector="width:height:">width: width height: height	^ self new		width: width height: height;		yourself</body>
+isFood
 
-<body package="Battlesnake" selector="defaultBoard">defaultBoard	^ self width: 20 height: 20</body>
-</methods>
+	^ true!
 
+isObstacle
 
-<methods>
-<class-id>Battlesnake.Board</class-id> <category>accessing</category>
+	^ false! !
 
-<body package="Battlesnake" selector="foods">foods	^foods</body>
+!Battlesnake.Food methodsFor: 'accessing state'!
 
-<body package="Battlesnake" selector="topRight">topRight	^ rows first last</body>
+stateDescription
 
-<body package="Battlesnake" selector="dimensions">dimensions	^ self width @ self height</body>
+	^ 'food'! !
 
-<body package="Battlesnake" selector="bottomLeft">bottomLeft	^ rows last first</body>
 
-<body package="Battlesnake" selector="topLeft">topLeft	^ rows first first</body>
+!Battlesnake.Board class methodsFor: 'accessing'!
 
-<body package="Battlesnake" selector="height">height	^ rows size</body>
+directions
 
-<body package="Battlesnake" selector="bottomRight">bottomRight	^ rows last last</body>
+	^ Directions! !
 
-<body package="Battlesnake" selector="at:">at: aPoint"	aPoint is a zero-based coordinate of a tile. Adjust indexes to Smalltalk one-based."	^ (rows at: aPoint y + 1) at: aPoint x + 1</body>
+!Battlesnake.Board class methodsFor: 'instance creation'!
 
-<body package="Battlesnake" selector="snakes">snakes	^ snakes</body>
+width: width height: height
 
-<body package="Battlesnake" selector="cornerTiles">cornerTiles	^ Array		with: self topLeft		with: self topRight		with: self bottomRight		with: self bottomLeft</body>
+	^ self new
+		width: width height: height;
+		yourself!
 
-<body package="Battlesnake" selector="width">width	^ rows any size</body>
+defaultBoard
 
-<body package="Battlesnake" selector="rows">rows	^rows</body>
-</methods>
+	^ self width: 20 height: 20! !
 
-<methods>
-<class-id>Battlesnake.Board</class-id> <category>testing</category>
 
-<body package="Battlesnake" selector="allTiles">allTiles"	(self defaultBoard allTiles)"	^ self rows inject: OrderedCollection new into: [ :tiles :row |		tiles addAll: row;		yourself ]</body>
+!Battlesnake.Board methodsFor: 'accessing'!
 
-<body package="Battlesnake" selector="isEmpty">isEmpty	^ self allTiles allSatisfy: [:eachTile | eachTile isEmpty]</body>
-</methods>
+bottomLeft
 
-<methods>
-<class-id>Battlesnake.Board</class-id> <category>sorting</category>
+	^ rows last first!
 
-<body package="Battlesnake" selector="weakestSnake">weakestSnake	| sorted |		sorted := self snakesByPower.	^ sorted isEmpty		ifTrue: [ nil ]		ifFalse: [ sorted last ]</body>
+snakes
 
-<body package="Battlesnake" selector="strongestSnake">strongestSnake	| sorted |		sorted := self snakesByPower.	^ sorted isEmpty		ifTrue: [ nil ]		ifFalse: [ sorted first ]</body>
+	^ snakes!
 
-<body package="Battlesnake" selector="snakesByPower">snakesByPower	^ self sortItems: self snakes by: [:eachSnake | eachSnake power]</body>
+topLeft
 
-<body package="Battlesnake" selector="sortItems:by:">sortItems: items by: aBlock"	Answer the closest of the items where aBlock determines which distance we use."	items isEmpty ifTrue: [ ^ #() ].		^ items sorted: [ :a :b | (aBlock value: a) &lt;= (aBlock value: b) ].</body>
-</methods>
+	^ rows first first!
 
-<methods>
-<class-id>Battlesnake.Board</class-id> <category>actions</category>
+cornerTiles
 
-<body package="Battlesnake" selector="addSnake:">addSnake: aSnake	aSnake segments do: [ :each |		each tile content: each.		].		^ snakes at: aSnake snakeName ifAbsentPut: [aSnake]</body>
+	^ Array
+		with: self topLeft
+		with: self topRight
+		with: self bottomRight
+		with: self bottomLeft!
 
-<body package="Battlesnake" selector="putFoodAt:">putFoodAt: aPoint	| tile food |	tile := self at: aPoint.	tile hasFood ifTrue: [ ^ self ].	food := Food new.	tile content: food.	foods at: tile put: food.</body>
+at: aPoint
+"
+	aPoint is a zero-based coordinate of a tile. Adjust indexes to Smalltalk one-based.
+"
 
-<body package="Battlesnake" selector="removeFood:">removeFood: aFood	^ foods removeKey: aFood tile</body>
+	^ (rows at: aPoint y + 1) at: aPoint x + 1!
 
-<body package="Battlesnake" selector="removeSnake:">removeSnake: aSnake	aSnake segments do: [ :each |		each tile content: nil.		].		^ snakes removeKey: aSnake ifAbsent: [nil]</body>
-</methods>
+foods
 
-<methods>
-<class-id>Battlesnake.Board</class-id> <category>initialize-release</category>
+	^foods!
 
-<body package="Battlesnake" selector="initialize">initialize	super initialize.	snakes := Dictionary new.	foods := Dictionary new</body>
+dimensions
 
-<body package="Battlesnake" selector="width:height:">width: width height: height	rows := Array new: height.	"Create all the Tiles."	1 to: height do: [ :y |		| cells |		cells := Array new: width.		rows at: y put: cells.		1 to: width do: [ :x |			cells at: x put: (BoardTile on: self at: (x - 1) @ (y - 1)).			]		].		"Now link Tiles to become neighbors"	rows inject: nil into: [ :northRow :eachRow |		northRow ifNotNil: [			northRow with: eachRow do: [:northTile :eachTile |				eachTile north: northTile]			].		eachRow inject: nil into: [ :west : tile |			west ifNotNil: [tile west: west].			tile].		eachRow		]</body>
-</methods>
+	^ self width @ self height!
 
-<methods>
-<class-id>Battlesnake.Board</class-id> <category>printing</category>
+directions
 
-<body package="Battlesnake" selector="printOn:">printOn: aStream	aStream nextPutAll: self jsonState</body>
-</methods>
+	^ self class directions!
 
-<methods>
-<class-id>Battlesnake.Board</class-id> <category>accessing state</category>
+width
 
-<body package="Battlesnake" selector="jsonState">jsonState	^ Game jsonEncode: self state</body>
+	^ rows any size!
 
-<body package="Battlesnake" selector="state">state"	Answer a collection of objects used to determine my state.	(self defaultBoard state)"	^ self rows collect: [ :eachRow | eachRow collect:#state ]</body>
-</methods>
+height
 
+	^ rows size!
 
-<methods>
-<class-id>Battlesnake.WormHole class</class-id> <category>accessing</category>
+bottomRight
 
-<body package="Battlesnake" selector="applicationClientClass">applicationClientClass		^ nil</body>
+	^ rows last last!
 
-<body package="Battlesnake" selector="activeGame:">activeGame: aGame	activeGame := aGame</body>
+rows
 
-<body package="Battlesnake" selector="activeGame">activeGame	^ activeGame</body>
-</methods>
+	^rows!
 
-<methods>
-<class-id>Battlesnake.WormHole class</class-id> <category>battlesnake API</category>
+topRight
 
-<body package="Battlesnake" selector="start">start	""	&lt;json: 'start'&gt;	&lt;GET&gt;	&lt;POST&gt;	| state |	state := self decodeRequest.	self activeGame: (Game fromState: state).	^self activeGame medusa startResponseState</body>
+	^ rows first last! !
 
-<body package="Battlesnake" selector="htmlDocument">htmlDocument"	Battlesnake rules specify that GET / returns a string with a link to our source code repository."	&lt;GET&gt;	&lt;plainText: ''&gt;	^ '&lt;a href="https://github.com/JerryKott/battlesnake"&gt;Medusa&lt;/a&gt;&lt;p&gt;This paragraph and the following will need to be removed for the actual game. It is here for testing purposes.&lt;/p&gt;&lt;a href="/start?data=start%20the%20game"&gt;Send a &lt;b&gt;START&lt;/b&gt; request.&lt;/a&gt;&lt;br&gt;&lt;a href="/move?data=send%20us%20your%20board"&gt;Send a &lt;b&gt;MOVE&lt;/b&gt; request.&lt;/a&gt;&lt;br&gt;&lt;a href="/end?data=stop%20the%20game"&gt;Send an &lt;b&gt;END&lt;/b&gt; request.&lt;/a&gt;&lt;br&gt;'</body>
+!Battlesnake.Board methodsFor: 'testing'!
 
-<body package="Battlesnake" selector="move">move""	&lt;json: 'move'&gt;	&lt;GET&gt;	&lt;POST&gt;		| state |	state := self decodeRequest.	^ (Dictionary withAll: state)		add: 'comment' -&gt; 'This is where we will respond with our snake''s next move.';		yourself</body>
+allTiles
+"
+	(self defaultBoard allTiles)
+"
+	^ self rows inject: OrderedCollection new into: [ :tiles :row |
+		tiles addAll: row;
+		yourself ]!
 
-<body package="Battlesnake" selector="decodeRequest">decodeRequest	| data formData uri query |	formData := self currentRequestData.	query := formData data first key.	uri := URI fromEncodedString: '/?', query.	data := Dictionary new.	uri queryKeysAndValuesDo: [ :key :value |		| valueString |		valueString := URLEncoder decode: value.		data at: key asSymbol put: (JSON decode: valueString)		].		^ data</body>
+isEmpty
 
-<body package="Battlesnake" selector="end">end""	&lt;json: 'end'&gt;	&lt;GET&gt;	&lt;POST&gt;		| formData |	formData := self currentRequestData.			^ (Dictionary withAll: formData data)		add: 'comment' -&gt; 'This is where we will end the game.';		yourself</body>
-</methods>
+	^ self allTiles allSatisfy: [:eachTile | eachTile isEmpty]! !
 
-<methods>
-<class-id>Battlesnake.WormHole class</class-id> <category>configuration</category>
+!Battlesnake.Board methodsFor: 'sorting'!
 
-<body package="Battlesnake" selector="serverConfiguration">serverConfiguration"	Add myself to the Battlesnake Server.	http://localhost:8889/"	&lt;position: 10&gt;	&lt;server: 'Battlesnake Server' path: '/'&gt;</body>
-</methods>
+snakesByPower
 
+	^ self sortItems: self snakes by: [:eachSnake | eachSnake power]!
 
-<methods>
-<class-id>Battlesnake.Medusa</class-id> <category>accessing</category>
+weakestSnake
 
-<body package="Battlesnake" selector="target:">target: anObject	target := anObject</body>
+	| sorted |
+	
+	sorted := self snakesByPower.
+	^ sorted isEmpty
+		ifTrue: [ nil ]
+		ifFalse: [ sorted last ]!
 
-<body package="Battlesnake" selector="bubble">bubble	^ bubble ifNil: [ bubble := self tilesWithinDistance: self bubbleSize]</body>
+sortItems: items by: aBlock
+"
+	Answer the closest of the items where aBlock determines which distance we use.
+"
 
-<body package="Battlesnake" selector="strategies:">strategies: anObject	strategies := anObject</body>
+	items isEmpty ifTrue: [ ^ #() ].
+	
+	^ items sorted: [ :a :b | (aBlock value: a) <= (aBlock value: b) ].!
 
-<body package="Battlesnake" selector="path">path	^path ifNil: [ self findPathToTarget ]</body>
+strongestSnake
 
-<body package="Battlesnake" selector="bubbleSize">bubbleSize"	I am a Medusa. My bubble size is 3 moves ahead."	^ 3</body>
+	| sorted |
+	
+	sorted := self snakesByPower.
+	^ sorted isEmpty
+		ifTrue: [ nil ]
+		ifFalse: [ sorted first ]! !
 
-<body package="Battlesnake" selector="findTarget">findTarget"	Return a Tile or Food (possibly another Snake Head?) based on the current strategy.	For now, just return my tail's neighbor that is not a snake part."	^ self tail neighbours detect: [ :any | any isEmpty ]</body>
+!Battlesnake.Board methodsFor: 'actions'!
 
-<body package="Battlesnake" selector="path:">path: tiles"	Set my path to a collection of Tiles"	path := tiles</body>
+addSnake: aSnake
 
-<body package="Battlesnake" selector="setNextStrategy">setNextStrategy"	Here is where we determine what out next strategy should be. Until that is finalized,	let's just set the 'find food' strategy is default."	strategies add: [ self findFood ]</body>
+	aSnake segments do: [ :each |
+		each tile content: each.
+		].
+	
+	^ snakes at: aSnake snakeName ifAbsentPut: [aSnake]!
 
-<body package="Battlesnake" selector="nextMove">nextMove	| tile |	tile := self path removeFirst.	self loseInterestInTile: tile.	tile == self target tile ifTrue: [		self resetPath; resetTarget.		].	^ tile - head</body>
+removeFood: aFood
 
-<body package="Battlesnake" selector="findPathToTarget">findPathToTarget	"	Find the best path to my current target."	| newPath |	newPath := self findPathTo: self target.	newPath do: [:eachTile | self becomeInterestedInTile: eachTile].	^newPath</body>
+	foods removeKey: aFood tile ifAbsent: [nil].
+	aFood tile: nil!
 
-<body package="Battlesnake" selector="target">target	^target ifNil: [target := self findTarget]</body>
+putFoodAt: aPoint
 
-<body package="Battlesnake" selector="strategies">strategies	strategies isEmpty ifTrue: [ self setNextStrategy ].	^strategies</body>
+	| tile food |
+	tile := self at: aPoint.
+	tile hasFood ifTrue: [ ^ self ].
+	food := Food new.
+	tile content: food.
+	foods at: tile put: food.!
 
-<body package="Battlesnake" selector="bubbleShift">bubbleShift"	Answer a point that should be the direction of the bubble's shift.	All empty tiles have the weight equal to distance from the head.	Tiles with food have larger weight the closer they are to the head."	| sumX sumY sumWeight dX dY shift |		sumX := sumY := sumWeight := 0.		self bubble do: [ :eachTile |		| eachWeight |		eachWeight := 0.		eachTile isEmpty			ifTrue: ["				eachWeight := self distanceTo: eachTile."				eachWeight := 1.				]			ifFalse: [				eachWeight := self bubbleSize + 1 - (self distanceTo: eachTile).			].		eachTile isTraversable ifFalse: [			eachWeight := eachWeight negated.			].		sumX := sumX + (eachTile x * eachWeight).		sumY := sumY + (eachTile y * eachWeight).		sumWeight := sumWeight + eachWeight.		].		dX := (sumX / sumWeight) - head x.	dY := (sumY / sumWeight) - head y.		shift := dX abs &gt; dY abs		ifTrue: [ dX sign @ 0 ]		ifFalse: [ 0 @ dY sign ].				^ shift</body>
-</methods>
+removeSnake: aSnake
 
-<methods>
-<class-id>Battlesnake.Medusa</class-id> <category>actions</category>
+	aSnake segments do: [ :each |
+		each tile content: nil.
+		].
+	
+	^ snakes removeKey: aSnake ifAbsent: [nil]! !
 
-<body package="Battlesnake" selector="findEnemiesInBubble">findEnemiesInBubble"	Go through my bubble and for each tile that have a snake part in them that is not me, add that snake to the result."	| enemies |		enemies := Set new.	 self bubble do: [ :eachTile | eachTile snake		ifNotNil: [ :snake | snake ~~ self ifTrue: [ enemies add: snake ]]		].		^ enemies</body>
+!Battlesnake.Board methodsFor: 'initialize-release'!
 
-<body package="Battlesnake" selector="findFoodsInBubble">findFoodsInBubble	| foods |		foods := Set new.	 self bubble do: [ :eachTile | eachTile hasFood ifTrue: [ foods add: eachTile content ]		].		^ foods</body>
+initialize
 
-<body package="Battlesnake" selector="becomeInterestedInTile:">becomeInterestedInTile: aTile	^aTile when: TileStateChanged send: #tileStateChanged: to: self</body>
+	super initialize.
+	snakes := Dictionary new.
+	foods := Dictionary new!
 
-<body package="Battlesnake" selector="resetTarget">resetTarget	target := nil</body>
+width: width height: height
 
-<body package="Battlesnake" selector="loseInterestInTile:">loseInterestInTile: eachTile	^eachTile retractInterestIn: TileStateChanged for: self</body>
 
-<body package="Battlesnake" selector="resetPath">resetPath	path ifNotNil: [path do: [:eachTile | self loseInterestInTile: eachTile]].	path := nil</body>
+	rows := Array new: height.
+	"Create all the Tiles."
+	1 to: height do: [ :y |
+		| cells |
+		cells := Array new: width.
+		rows at: y put: cells.
+		1 to: width do: [ :x |
+			cells at: x put: (BoardTile on: self at: (x - 1) @ (y - 1)).
+			]
+		].
+	
+	"Now link Tiles to become neighbors"
+	rows inject: nil into: [ :northRow :eachRow |
+		northRow ifNotNil: [
+			northRow with: eachRow do: [:northTile :eachTile |
+				eachTile north: northTile]
+			].
+		eachRow inject: nil into: [ :west : tile |
+			west ifNotNil: [tile west: west].
+			tile].
+		eachRow
+		]! !
 
-<body package="Battlesnake" selector="resetBubble">resetBubble	bubble := nil</body>
-</methods>
+!Battlesnake.Board methodsFor: 'printing'!
 
-<methods>
-<class-id>Battlesnake.Medusa</class-id> <category>strategies</category>
+printOn: aStream
 
-<body package="Battlesnake" selector="findFood">findFood"	This is a placeholder for the 'find food strategy algorithm."</body>
+	aStream nextPutAll: self jsonState! !
 
-<body package="Battlesnake" selector="huntSnakes">huntSnakes"	This strategy method will implement the snake hunting algorithm."</body>
+!Battlesnake.Board methodsFor: 'accessing state'!
 
-<body package="Battlesnake" selector="goToPerimeter">goToPerimeter"	This strategy method is a placeholder to go the board perimeter."</body>
+jsonState
 
-<body package="Battlesnake" selector="nextStrategy">nextStrategy"	ANswer a block which, when evaluated, will run the behaviour to plan moves."	^ self strategies removeFirst</body>
+	^ Game jsonEncode: self state!
 
-<body package="Battlesnake" selector="escapeSnakes">escapeSnakes"	This strategy method will implement the snake escaping algorithm."</body>
+state
+"
+	Answer a collection of objects used to determine my state.
+	(self defaultBoard state)
+"
+	^ self rows collect: [ :eachRow | eachRow collect:#state ]! !
 
-<body package="Battlesnake" selector="planStrategy">planStrategy""	self nextStrategy value</body>
-</methods>
 
-<methods>
-<class-id>Battlesnake.Medusa</class-id> <category>initialize-release</category>
+!Battlesnake.PathNode class methodsFor: 'instance creation'!
 
-<body package="Battlesnake" selector="initialize">initialize	"Initialize a newly created instance. This method must answer the receiver."	super initialize.	snakeName := 'Medusa'.	strategies := OrderedCollection new.</body>
-</methods>
+new
 
-<methods>
-<class-id>Battlesnake.Medusa</class-id> <category>accessing state</category>
+	^ super new initialize!
 
-<body package="Battlesnake" selector="startResponseState">startResponseState	| state response |	state := self state.		response := #(#name #color #head_url #taunt) collect: [ :each | state associationAt: each ifAbsent: [nil]].		^ Dictionary withAll: response</body>
-</methods>
+on: aTile
 
-<methods>
-<class-id>Battlesnake.Medusa</class-id> <category>notifications</category>
+	^ self new
+		tile: aTile;
+		yourself! !
 
-<body package="Battlesnake" selector="tileStateChanged:">tileStateChanged: anAnnouncement</body>
-</methods>
 
+!Battlesnake.PathNode methodsFor: 'accessing'!
 
-<methods>
-<class-id>Core.Point</class-id> <category>accessing</category>
+hCost
 
-<body package="Battlesnake" selector="battlesnakeDistance">battlesnakeDistance	^ x abs + y abs</body>
-</methods>
+	^hCost!
 
+gCost
+"
+	If it hasn't been calculated yet, determine gCost as the product of my distance from the start of the path
+	(the first node in the linked list) and a cost associated with a single step.
+"
+	^gCost ifNil: [ gCost := self distanceFromStart * self stepCost ]!
 
-<methods>
-<class-id>SiouX.Server class</class-id> <category>configuration</category>
+position
 
-<body package="Battlesnake" selector="battlesnakeServer:">battlesnakeServer: server	&lt;server: 'Battlesnake Server'&gt;	server listenOn: 8889 for: HttpConnection</body>
-</methods>
+	^ tile position!
 
+stepCost
+"
+	Answer how much it costs us to make a step. Let's use 100 because it's such a nice round number.
+"
 
+	^ 100!
 
-</st-source>
+distanceTo: anotherNode
+
+	| offset |
+	
+	offset := (anotherNode position - self position) abs.
+	"We can only make rectangular moves. If we were able to move diagonally, we'd have to use pythagorean theorem to calculate
+	the diagonal distances."
+	^ offset x + offset y!
+
+parentNode: anObject
+
+	parentNode := anObject!
+
+tile: anObject
+
+	tile := anObject!
+
+tile
+
+	^tile!
+
+parentNode
+
+	^parentNode!
+
+targetDistance: distance
+"
+	distance is an Integer representing minimum number of steps to a target.
+"
+
+	hCost := distance * self stepCost!
+
+distanceFromStart
+"
+	Once a Node has a parentNode, it's distanceFromStart needs to be calculated only once.
+"
+	^ distanceFromStart ifNil: [
+		| currentNode |	
+		distanceFromStart := 0.
+		currentNode := self.
+		[currentNode notNil] whileTrue: [
+			distanceFromStart := distanceFromStart + 1.
+			currentNode := currentNode parentNode
+			].
+		distanceFromStart ]!
+
+fCost
+
+	^ self gCost + self hCost! !
+
+!Battlesnake.PathNode methodsFor: 'printing'!
+
+printOn: aStream
+
+	super printOn: aStream.
+	aStream nextPut: $(.
+	self position printOn: aStream.
+	aStream nextPut: $).! !
+
+!Battlesnake.PathNode methodsFor: 'initialize-release'!
+
+initialize
+
+	super initialize.
+	
+	gCost := hCost := 0.! !
+
+
+!Battlesnake.BoardTile class methodsFor: 'instance creation'!
+
+on: aBoard at: aPosition
+
+	^ self new
+		board: aBoard;
+		position: aPosition;
+		yourself! !
+
+
+!Battlesnake.BoardTile methodsFor: 'accessing'!
+
+snake
+
+	^ content ifNotNil: [ content snake ]!
+
+board: anObject
+
+	board := anObject!
+
+x
+
+	^ position x!
+
+position
+
+	^position!
+
+content
+	
+	^ content!
+
+east: aTile
+
+	east == aTile ifTrue: [^self].
+	east := aTile.
+	aTile west: self!
+
+passingCostIn: numberOfMoves for: aMedusa
+
+	self isTraversable ifTrue: [ ^ 0 ].	"Actually, this should be a probabilistic function of the distance of other snakes on board. "
+	
+	"content must be a SnakePart. Determine its tailLength, and whether it's shorter than numberOfMoves."
+	
+	^ (content tailLength < numberOfMoves)
+		ifTrue: [ 0 ]
+		ifFalse: [ self highPassingCost ]!
+
+south
+
+	^south!
+
+probableCostIn: numberOfMoves for: aMedusa
+
+	| cost |
+	cost := 0.
+	
+	self board snakes do: [ :eachSnake |
+		eachSnake == aMedusa ifFalse: [
+			(eachSnake head distanceTo: self) < numberOfMoves ifTrue: [
+				]
+			].
+		].
+	
+	cost!
+
+y
+
+	^ position y!
+
+west
+
+	^west!
+
+south: aTile
+
+	south == aTile ifTrue: [ ^ self ].
+	south := aTile.
+	aTile north: self!
+
+neighbourAt: offset
+
+	offset = (-1 @ 0) ifTrue: [^ west].
+	offset = (1 @ 0) ifTrue: [^ east].
+	offset = (0 @ -1) ifTrue: [^ north].
+	offset = (0 @ 1) ifTrue: [^ south].
+	^ nil!
+
+north
+
+	^north!
+
+east
+
+	^east!
+
+west: aTile
+
+	west == aTile ifTrue: [ ^ self ].
+	west := aTile.
+	aTile east: self!
+
+neighbours
+
+	^ neighbours ifNil: [ neighbours := (Set new: 4)
+		add: north;
+		add: east;
+		add: south;
+		add: west;
+		yourself]!
+
+position: aPoint
+
+	position := aPoint!
+
+board
+
+	^board!
+
+tile
+"
+	For polymorphic use of certain methods, I implement tile to return self.
+"
+	^ self!
+
+north: aTile
+
+	north == aTile ifTrue: [ ^ self ].
+	north := aTile.
+	aTile south: self!
+
+content: aTileContent
+
+	content == aTileContent ifTrue: [ ^ self ].
+	content ifNotNil: [
+		content isFood ifTrue: [ board removeFood: content]
+		].
+	content := aTileContent.
+	content ifNotNil: [ content tile: self ].
+
+	self announce: (TileStateChanged on: self)!
+
+highPassingCost
+"
+	Answer a high number representing basically a non-passable content.
+"
+
+	^ 16rFFFFFFF! !
+
+!Battlesnake.BoardTile methodsFor: 'testing'!
+
+hasFood
+
+	^ content notNil and: [ content isFood ]!
+
+isEmpty
+
+	^ content isNil!
+
+isTraversable
+
+	^ self isEmpty or: [content isObstacle not ]!
+
+isOccupiedBySnake
+
+	^ content notNil and: [ content isSnakePart ]! !
+
+!Battlesnake.BoardTile methodsFor: 'finding items'!
+
+closestEdge
+
+	| corner rectangle |
+	corner := self closestCorner.
+	rectangle :=self position corner: corner position.
+	
+	^ rectangle width abs >= rectangle height abs
+		ifTrue: [board at: self x @ corner y ]
+		ifFalse: [board at: corner x @ self y ].!
+
+closestCornerByPath
+
+	^ self
+		closestOf: board cornerTiles
+		sortedBy: [ :eachTile | self pathDistanceTo: eachTile ]!
+
+closestSnake
+
+	^ self
+		closestOf: board snakes
+		sortedBy: [ :eachSnake | self distanceTo: eachSnake ]!
+
+farthestCorner
+
+	^ self
+		farthestOf: board cornerTiles
+		sortedBy: [ :eachTile | self distanceTo: eachTile ]!
+
+farthestOf: items sortedBy: aBlock
+"
+	Answer the farthest of the items where aBlock determines which distance we use.
+"
+
+	items isEmpty ifTrue: [ ^ nil ].
+	
+	^ (board sortItems: items by: aBlock) last!
+
+closestCorner
+
+	^ self
+		closestOf: board cornerTiles
+		sortedBy: [ :eachTile | self distanceTo: eachTile ]!
+
+farthestEdgeTile
+
+	| corner rectangle |
+	corner := self farthestCorner.
+	rectangle :=self position corner: corner position.
+	
+	^ rectangle width abs < rectangle height abs
+		ifTrue: [board at: self x @ corner y ]
+		ifFalse: [board at: corner x @ self y ].!
+
+closestSnakeByPath
+
+	^ self
+		closestOf: board snakes
+		sortedBy: [ :eachSnake | self pathDistanceTo: eachSnake ]!
+
+closestFoodByPath
+
+	^ self
+		closestOf: board foods
+		sortedBy: [ :eachFood | self pathDistanceTo: eachFood ]!
+
+closestFood
+
+	^ self
+		closestOf: board foods
+		sortedBy: [ :eachFood | self distanceTo: eachFood ]!
+
+closestOf: items sortedBy: aBlock
+"
+	Answer the closest of the items where aBlock determines which distance we use.
+"
+
+	items isEmpty ifTrue: [ ^ nil ].
+	
+	^ (board sortItems: items by: aBlock) first! !
+
+!Battlesnake.BoardTile methodsFor: 'path finding'!
+
+findPathTo: tileOrContent
+"
+	Answer a collection of tiles leading to the targetTile. Do not include myself in the path.
+	OPEN - the set of nodes to be evaluated
+	CLOSED - set of nodes already evaluated
+	add the start node (representing myself) to the OPEN set
+"
+	| open closed nodes path current neighbourAtTile updateCosts updateNodeAtTile  currentNeighbours targetTile |
+	
+	targetTile := tileOrContent tile.
+	open := SortedCollection sortBlock: [ :a :b | a fCost <= b fCost ].
+	closed := Set new.
+	nodes := IdentityDictionary new. "Keep a map between tiles and nodes so the nodes can be revisited."
+	path := OrderedCollection new.
+
+	updateCosts := [ :node |
+		node targetDistance: (targetTile position - node tile position) battlesnakeDistance.
+		(open includes: node) ifTrue: [ open reSort ].
+		].
+	
+	neighbourAtTile := [ :tile |
+		nodes at: tile ifAbsentPut: [
+			| node |
+			node := PathNode on: tile.
+			updateCosts value: node.
+			node
+			]
+		].
+	
+	updateNodeAtTile := [ :tile |
+		| node |
+		node := neighbourAtTile value: tile.
+		updateCosts value: node.
+		node
+		].
+	
+	current := updateNodeAtTile value: self.
+	open add: current.
+	
+	"
+	loop
+		current = node in OPEN with the lowest f_cost
+		remove current from OPEN
+		add current to CLOSED
+		
+	"
+	[open isEmpty] whileFalse: [
+		current := open removeFirst.
+		closed add: current.
+		"
+		if current is the target node
+			return
+		
+		"
+		current tile == targetTile ifTrue: [
+			[ current notNil ] whileTrue: [
+				path add: current.
+				current := current parentNode.
+				].
+			^ (path reverse collect: #tile)
+				removeFirst;	"That's me!!"
+				yourself
+			].
+		"
+		for each neighbour of the current node
+			if neighbour is in CLOSED or neighbour is not traversable
+				skip to the next neighbour
+		"
+		currentNeighbours := current tile neighbours sorted: [ :a :b |
+			(targetTile position - a position) battlesnakeDistance <= (targetTile position - b position) battlesnakeDistance
+			].
+		currentNeighbours do: [ :eachNeighbour |
+			| node |
+			node := neighbourAtTile value: eachNeighbour.
+			 ((closed includes: node) or: [ eachNeighbour isTraversable not]) ifFalse: [
+				"
+				if new path to neighbour is shorter or neighbour is not in OPEN
+					set fCost of neighbour
+					set parent of neighbour to current
+					if neighbour is not in OPEN
+						add neighbour to OPEN
+				"
+				| oldGCost newGCost notInOpen|
+				
+				oldGCost := node gCost.
+				updateCosts value: node.
+				newGCost := node gCost.
+				notInOpen := (open includes: node) not.
+				(newGCost < oldGCost or: [ notInOpen]) ifTrue: [
+					node   parentNode: current.
+					notInOpen ifTrue: [
+						open add: node.
+						]
+					]
+				]
+			]
+		].
+
+	"If I got here there is no path to targetTile. Return nil."
+	^ nil!
+
+simplePathTo: targetTile
+"
+	Find which of the x,y deltas is larger, and add nodes along that axis before adding nodes along the other axis.
+"
+
+	| path rectangle long short current corner |
+	
+	path := OrderedCollection new: (self distanceTo: targetTile) + 1.
+	rectangle := self position corner: targetTile position.
+
+	rectangle width abs >= rectangle height abs
+		ifTrue: [
+			long := rectangle width @ 0.
+			short := 0 @ rectangle height ]
+		ifFalse: [
+			short := rectangle width @ 0.
+			long := 0 @ rectangle height ].
+
+	corner := self position + long.
+	long := long x sign @ long y sign.
+	short := short x sign @ short y sign.
+	current := self.
+
+	(Array with: corner -> long with: targetTile position -> short) do: [ :cornerOffset |
+		| nextCorner offset |
+		nextCorner := cornerOffset key.
+		offset := cornerOffset value.
+		[ current position = nextCorner ] whileFalse: [
+			current := current neighbourAt: offset.
+			path add: current]
+		].
+
+	^path! !
+
+!Battlesnake.BoardTile methodsFor: 'initialize-release'!
+
+initialize
+	"Initialize a newly created instance. This method must answer the receiver."
+
+	super initialize.
+	^self! !
+
+!Battlesnake.BoardTile methodsFor: 'measuring'!
+
+areaWithinDistance: distance
+"
+	Answer the number of tiles possible occupied within distance.
+	The number of unique tiles that has a NY distance given by distance.
+	Examples:
+		BoardTile new areaWithinDistance: 1.
+		BoardTile new areaWithinDistance: 2.
+		BoardTile new areaWithinDistance: 3.
+		BoardTile new areaWithinDistance: 10.
+"
+
+	^ 2 * distance * (distance + 1)!
+
+pathDistanceTo: aTileOrContent using: aBlock
+
+	^ (aBlock value: aTileOrContent) ifNotNil: [: path | path size ]!
+
+tilesWithinDistance: distance
+"
+"
+
+	| xMin xMax yMin yMax tiles  |
+	
+	tiles := Set new: (self areaWithinDistance: distance).
+	
+	xMin := (position x - distance) max: 0.
+	xMax := (position x + distance) min: board width - 1.
+	yMin := (position y - distance) max: 0.
+	yMax := (position y + distance) min: board height - 1.
+	
+	xMin to: xMax do: [ :x |
+		| yFrom yTo xOffset |
+		xOffset := x - position x.
+		yFrom := position y - distance + xOffset abs.
+		yTo := position y + distance - xOffset abs.
+		yFrom := yFrom max: yMin.
+		yTo := yTo min: yMax.
+		yFrom to: yTo do: [ :y |
+			tiles add: (board at: (x @ y))
+			]
+		].
+	
+	^ tiles!
+
+distanceTo: contentOrTile
+
+	^ (contentOrTile position - self position) battlesnakeDistance!
+
+pathDistanceTo: contentOrTile
+
+	^ self pathDistanceTo: content using: [self findPathTo: contentOrTile]! !
+
+!Battlesnake.BoardTile methodsFor: 'printing'!
+
+printOn: aStream
+
+	aStream nextPutAll: self jsonState! !
+
+!Battlesnake.BoardTile methodsFor: 'converting'!
+
+asDictionary
+
+	| dict |
+	dict := Dictionary new.
+	dict at: #state put: self state.
+	self snake ifNotNil: [ dict at: #snake put: self snake snakeName ].
+	
+	^ dict! !
+
+!Battlesnake.BoardTile methodsFor: 'accessing state'!
+
+jsonState
+
+	^ Game jsonEncode: self state!
+
+state
+
+	| state |
+	
+	state := Dictionary with: (#xy -> (Array with: self x with: self y)).
+	
+	content
+		ifNil: [ state add: #state -> 'empty']
+		ifNotNil: [ state addAll: content state ].
+	
+	^ state! !
+
+
+!Battlesnake.Body methodsFor: 'accessing'!
+
+previousSegment: anObject
+
+	previousSegment := anObject!
+
+previousSegment
+
+	^previousSegment! !
+
+!Battlesnake.Body methodsFor: 'accessing state'!
+
+stateDescription
+
+	^ 'body'! !
+
+!Battlesnake.Body methodsFor: 'testing'!
+
+isSnakeBody
+
+	^ true! !
+
+
+!Battlesnake.WormHole class methodsFor: 'html'!
+
+headJQueryCss
+	<head: 50>
+
+	^'
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/humanity/jquery-ui.css" />
+'!
+
+headExternalLibraries
+	<head: 200>
+
+	^'
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+'!
+
+bodyTester
+
+	<body: 100>
+	
+	^ '<p>Drop into Developer Tools!!</p>'! !
+
+!Battlesnake.WormHole class methodsFor: 'configuration'!
+
+serverConfiguration
+"
+	Add myself to the Battlesnake Server.
+	http://localhost:8889/
+"
+	<position: 10>
+	<server: 'Battlesnake Server' path: '/'>! !
+
+!Battlesnake.WormHole class methodsFor: 'accessing'!
+
+activeGame
+
+	^ activeGame!
+
+activeGame: aGame
+
+	activeGame := aGame!
+
+applicationClientClass
+	
+	^ WormHoleClient! !
+
+!Battlesnake.WormHole class methodsFor: 'appex overrides'!
+
+appexCoreCode
+"
+	This method has been added to get access to AppeX.CoreCode.js in tester subdirectory.
+"
+
+	<js: 'tester/AppeX.CoreCode.js'>
+	
+	^ AppeX.CoreCode javascriptLibrary!
+
+appexWormHoleClient
+"
+	This method has been added to get access to WormHoleClient.js in tester subdirectory.
+"
+	<js: 'tester/Battlesnake.WormHoleClient.js'>
+	
+	^ self applicationClientClass javascriptLibrary! !
+
+!Battlesnake.WormHole class methodsFor: 'testing API'!
+
+testingJs
+
+	<js: 'tester/default.js'>
+	
+	^ '
+	testRequest = function testRequest(data, url) {
+		$.ajax({
+			url: url,
+			type: "POST",
+			contentType: "application/json",
+			data: data,
+			success: testSuccess
+		})
+	};
+	
+	testSuccess = function testSuccess(result, status, xhr){
+		console.log(result);
+	};
+
+	testFailed = function testFailed(xhr,status,error){
+		console.log(xhr,status,error);
+	};
+'!
+
+testPage
+"
+"
+
+	<html: 'tester'>
+	
+	^ super htmlDocument! !
+
+!Battlesnake.WormHole class methodsFor: 'battlesnake API'!
+
+htmlDocument
+"
+	Battlesnake rules specify that GET / returns a string with a link to our source code repository.
+"
+	<GET>
+	<plainText: ''>
+
+	^ '<a href="https://github.com/JerryKott/battlesnake">Medusa</a>
+<p>This paragraph and the following will need to be removed for the actual game. It is here for testing purposes.</p>
+<a href="/start?data=start%20the%20game">Send a <b>START</b> request.</a><br>
+<a href="/move?data=send%20us%20your%20board">Send a <b>MOVE</b> request.</a><br>
+<a href="/end?data=stop%20the%20game">Send an <b>END</b> request.</a><br>
+'!
+
+move
+"
+"
+
+	<json: 'move'>
+	<GET>
+	<POST>
+	
+	| state |
+	state := self decodeFormDataRequest.
+
+	^ (Dictionary withAll: state)
+		add: 'comment' -> 'This is where we will respond with our snake''s next move.';
+		yourself!
+
+start
+	"
+"
+	<json: 'start'>
+	<GET>
+	<POST>
+
+	| state |
+	state := self decodeFormDataRequest.
+	self activeGame: (Game fromState: state).
+	^self activeGame medusa startResponseState!
+
+end
+"
+"
+
+	<json: 'end'>
+	<GET>
+	<POST>
+	
+	| formData |
+	formData := self currentRequestData.
+		
+	^ (Dictionary withAll: formData data)
+		add: 'comment' -> 'This is where we will end the game.';
+		yourself! !
+
+!Battlesnake.WormHole class methodsFor: 'encoding - decoding'!
+
+decodeFormDataRequest
+
+	| data formData |
+	formData := self currentRequestData.
+	data := JSON decode: formData data first key.
+	
+	^ data!
+
+decodeJsonRequest
+
+	| data formData uri query |
+	formData := self currentRequestData.
+	query := formData data first key.
+	uri := URI fromEncodedString: '/?', query.
+	data := Dictionary new.
+	uri queryKeysAndValuesDo: [ :key :value |
+		| valueString |
+		valueString := URLEncoder decode: value.
+		data at: key asSymbol put: valueString
+		].
+	
+	^ data!
+
+encodeFormData: data
+
+	^ JSON encode: data!
+
+encodeJsonData: data
+"
+	This is a placeholder in case we need to change our implementation depending on the XHR contentType.
+"
+	^ JSON encode: data! !
+
+
+!Battlesnake.WormHoleClient methodsFor: 'test data'!
+
+startData() {
+	return {"game_id": "test-game", "width": 20, "height": 20};
+}!
+
+exampleGameData() {
+	return {"game_id": "Example Game", "snakes": {"Enemy 1": {"head_url": "http://head.some-snake.example/head.png", "taunt": "Taunts need to be implemented", "color": "#ff0000", "coords": [[10, 12], [10, 13], [10, 14], [10, 15]], "score": 0, "state": "alive", "name": "Enemy 1"}, "Medusa": {"head_url": "http://head.some-snake.example/head.png", "taunt": "Taunts need to be implemented", "color": "#ff0000", "coords": [[7, 8], [6, 8], [5, 8], [5, 9], [5, 10], [4, 10]], "score": 0, "state": "alive", "name": "Medusa"}, "Enemy 2": {"head_url": "http://head.some-snake.example/head.png", "taunt": "Taunts need to be implemented", "color": "#ff0000", "coords": [[11, 5], [11, 4], [10, 4], [10, 3], [10, 2], [11, 2], [12, 2], [13, 2]], "score": 0, "state": "alive", "name": "Enemy 2"}}, "turn": 0, "board": [[{"xy": [0, 0], "state": "empty"}, {"xy": [1, 0], "state": "empty"}, {"xy": [2, 0], "state": "empty"}, {"xy": [3, 0], "state": "empty"}, {"xy": [4, 0], "state": "empty"}, {"xy": [5, 0], "state": "empty"}, {"xy": [6, 0], "state": "empty"}, {"xy": [7, 0], "state": "empty"}, {"xy": [8, 0], "state": "empty"}, {"xy": [9, 0], "state": "empty"}, {"xy": [10, 0], "state": "empty"}, {"xy": [11, 0], "state": "empty"}, {"xy": [12, 0], "state": "empty"}, {"xy": [13, 0], "state": "empty"}, {"xy": [14, 0], "state": "empty"}, {"xy": [15, 0], "state": "empty"}, {"xy": [16, 0], "state": "empty"}, {"xy": [17, 0], "state": "empty"}, {"xy": [18, 0], "state": "empty"}, {"xy": [19, 0], "state": "empty"}], [{"xy": [0, 1], "state": "empty"}, {"xy": [1, 1], "state": "empty"}, {"xy": [2, 1], "state": "empty"}, {"xy": [3, 1], "state": "empty"}, {"xy": [4, 1], "state": "empty"}, {"xy": [5, 1], "state": "empty"}, {"xy": [6, 1], "state": "empty"}, {"xy": [7, 1], "state": "empty"}, {"xy": [8, 1], "state": "empty"}, {"xy": [9, 1], "state": "empty"}, {"xy": [10, 1], "state": "empty"}, {"xy": [11, 1], "state": "empty"}, {"xy": [12, 1], "state": "empty"}, {"xy": [13, 1], "state": "empty"}, {"xy": [14, 1], "state": "empty"}, {"xy": [15, 1], "state": "empty"}, {"xy": [16, 1], "state": "empty"}, {"xy": [17, 1], "state": "empty"}, {"xy": [18, 1], "state": "empty"}, {"xy": [19, 1], "state": "empty"}], [{"xy": [0, 2], "state": "empty"}, {"xy": [1, 2], "state": "empty"}, {"xy": [2, 2], "state": "food"}, {"xy": [3, 2], "state": "empty"}, {"xy": [4, 2], "state": "empty"}, {"xy": [5, 2], "state": "empty"}, {"xy": [6, 2], "state": "empty"}, {"xy": [7, 2], "state": "empty"}, {"xy": [8, 2], "state": "empty"}, {"xy": [9, 2], "state": "empty"}, {"state": "body", "xy": [10, 2], "snake": "Enemy 2"}, {"state": "body", "xy": [11, 2], "snake": "Enemy 2"}, {"state": "body", "xy": [12, 2], "snake": "Enemy 2"}, {"state": "body", "xy": [13, 2], "snake": "Enemy 2"}, {"xy": [14, 2], "state": "empty"}, {"xy": [15, 2], "state": "empty"}, {"xy": [16, 2], "state": "empty"}, {"xy": [17, 2], "state": "empty"}, {"xy": [18, 2], "state": "empty"}, {"xy": [19, 2], "state": "empty"}], [{"xy": [0, 3], "state": "empty"}, {"xy": [1, 3], "state": "empty"}, {"xy": [2, 3], "state": "empty"}, {"xy": [3, 3], "state": "empty"}, {"xy": [4, 3], "state": "empty"}, {"xy": [5, 3], "state": "empty"}, {"xy": [6, 3], "state": "empty"}, {"xy": [7, 3], "state": "empty"}, {"xy": [8, 3], "state": "empty"}, {"xy": [9, 3], "state": "empty"}, {"state": "body", "xy": [10, 3], "snake": "Enemy 2"}, {"xy": [11, 3], "state": "empty"}, {"xy": [12, 3], "state": "empty"}, {"xy": [13, 3], "state": "empty"}, {"xy": [14, 3], "state": "empty"}, {"xy": [15, 3], "state": "empty"}, {"xy": [16, 3], "state": "empty"}, {"xy": [17, 3], "state": "empty"}, {"xy": [18, 3], "state": "empty"}, {"xy": [19, 3], "state": "empty"}], [{"xy": [0, 4], "state": "empty"}, {"xy": [1, 4], "state": "empty"}, {"xy": [2, 4], "state": "empty"}, {"xy": [3, 4], "state": "empty"}, {"xy": [4, 4], "state": "empty"}, {"xy": [5, 4], "state": "empty"}, {"xy": [6, 4], "state": "empty"}, {"xy": [7, 4], "state": "empty"}, {"xy": [8, 4], "state": "empty"}, {"xy": [9, 4], "state": "empty"}, {"state": "body", "xy": [10, 4], "snake": "Enemy 2"}, {"state": "body", "xy": [11, 4], "snake": "Enemy 2"}, {"xy": [12, 4], "state": "empty"}, {"xy": [13, 4], "state": "empty"}, {"xy": [14, 4], "state": "empty"}, {"xy": [15, 4], "state": "empty"}, {"xy": [16, 4], "state": "empty"}, {"xy": [17, 4], "state": "empty"}, {"xy": [18, 4], "state": "empty"}, {"xy": [19, 4], "state": "empty"}], [{"xy": [0, 5], "state": "empty"}, {"xy": [1, 5], "state": "empty"}, {"xy": [2, 5], "state": "empty"}, {"xy": [3, 5], "state": "empty"}, {"xy": [4, 5], "state": "empty"}, {"xy": [5, 5], "state": "empty"}, {"xy": [6, 5], "state": "empty"}, {"xy": [7, 5], "state": "empty"}, {"xy": [8, 5], "state": "empty"}, {"xy": [9, 5], "state": "empty"}, {"xy": [10, 5], "state": "empty"}, {"state": "head", "xy": [11, 5], "snake": "Enemy 2"}, {"xy": [12, 5], "state": "empty"}, {"xy": [13, 5], "state": "food"}, {"xy": [14, 5], "state": "empty"}, {"xy": [15, 5], "state": "empty"}, {"xy": [16, 5], "state": "empty"}, {"xy": [17, 5], "state": "empty"}, {"xy": [18, 5], "state": "empty"}, {"xy": [19, 5], "state": "empty"}], [{"xy": [0, 6], "state": "empty"}, {"xy": [1, 6], "state": "empty"}, {"xy": [2, 6], "state": "empty"}, {"xy": [3, 6], "state": "empty"}, {"xy": [4, 6], "state": "empty"}, {"xy": [5, 6], "state": "empty"}, {"xy": [6, 6], "state": "empty"}, {"xy": [7, 6], "state": "empty"}, {"xy": [8, 6], "state": "empty"}, {"xy": [9, 6], "state": "empty"}, {"xy": [10, 6], "state": "empty"}, {"xy": [11, 6], "state": "empty"}, {"xy": [12, 6], "state": "empty"}, {"xy": [13, 6], "state": "empty"}, {"xy": [14, 6], "state": "empty"}, {"xy": [15, 6], "state": "empty"}, {"xy": [16, 6], "state": "empty"}, {"xy": [17, 6], "state": "empty"}, {"xy": [18, 6], "state": "empty"}, {"xy": [19, 6], "state": "empty"}], [{"xy": [0, 7], "state": "empty"}, {"xy": [1, 7], "state": "empty"}, {"xy": [2, 7], "state": "empty"}, {"xy": [3, 7], "state": "empty"}, {"xy": [4, 7], "state": "empty"}, {"xy": [5, 7], "state": "empty"}, {"xy": [6, 7], "state": "empty"}, {"xy": [7, 7], "state": "empty"}, {"xy": [8, 7], "state": "empty"}, {"xy": [9, 7], "state": "empty"}, {"xy": [10, 7], "state": "empty"}, {"xy": [11, 7], "state": "empty"}, {"xy": [12, 7], "state": "empty"}, {"xy": [13, 7], "state": "empty"}, {"xy": [14, 7], "state": "empty"}, {"xy": [15, 7], "state": "empty"}, {"xy": [16, 7], "state": "empty"}, {"xy": [17, 7], "state": "empty"}, {"xy": [18, 7], "state": "empty"}, {"xy": [19, 7], "state": "empty"}], [{"xy": [0, 8], "state": "empty"}, {"xy": [1, 8], "state": "empty"}, {"xy": [2, 8], "state": "empty"}, {"xy": [3, 8], "state": "empty"}, {"xy": [4, 8], "state": "empty"}, {"state": "body", "xy": [5, 8], "snake": "Medusa"}, {"state": "body", "xy": [6, 8], "snake": "Medusa"}, {"state": "head", "xy": [7, 8], "snake": "Medusa"}, {"xy": [8, 8], "state": "empty"}, {"xy": [9, 8], "state": "empty"}, {"xy": [10, 8], "state": "empty"}, {"xy": [11, 8], "state": "empty"}, {"xy": [12, 8], "state": "empty"}, {"xy": [13, 8], "state": "empty"}, {"xy": [14, 8], "state": "empty"}, {"xy": [15, 8], "state": "empty"}, {"xy": [16, 8], "state": "empty"}, {"xy": [17, 8], "state": "empty"}, {"xy": [18, 8], "state": "empty"}, {"xy": [19, 8], "state": "empty"}], [{"xy": [0, 9], "state": "empty"}, {"xy": [1, 9], "state": "empty"}, {"xy": [2, 9], "state": "empty"}, {"xy": [3, 9], "state": "empty"}, {"xy": [4, 9], "state": "empty"}, {"state": "body", "xy": [5, 9], "snake": "Medusa"}, {"xy": [6, 9], "state": "empty"}, {"xy": [7, 9], "state": "empty"}, {"xy": [8, 9], "state": "empty"}, {"xy": [9, 9], "state": "empty"}, {"xy": [10, 9], "state": "empty"}, {"xy": [11, 9], "state": "empty"}, {"xy": [12, 9], "state": "empty"}, {"xy": [13, 9], "state": "empty"}, {"xy": [14, 9], "state": "empty"}, {"xy": [15, 9], "state": "empty"}, {"xy": [16, 9], "state": "empty"}, {"xy": [17, 9], "state": "empty"}, {"xy": [18, 9], "state": "empty"}, {"xy": [19, 9], "state": "empty"}], [{"xy": [0, 10], "state": "empty"}, {"xy": [1, 10], "state": "empty"}, {"xy": [2, 10], "state": "empty"}, {"xy": [3, 10], "state": "empty"}, {"state": "body", "xy": [4, 10], "snake": "Medusa"}, {"state": "body", "xy": [5, 10], "snake": "Medusa"}, {"xy": [6, 10], "state": "empty"}, {"xy": [7, 10], "state": "empty"}, {"xy": [8, 10], "state": "empty"}, {"xy": [9, 10], "state": "empty"}, {"xy": [10, 10], "state": "empty"}, {"xy": [11, 10], "state": "empty"}, {"xy": [12, 10], "state": "empty"}, {"xy": [13, 10], "state": "empty"}, {"xy": [14, 10], "state": "empty"}, {"xy": [15, 10], "state": "empty"}, {"xy": [16, 10], "state": "empty"}, {"xy": [17, 10], "state": "empty"}, {"xy": [18, 10], "state": "empty"}, {"xy": [19, 10], "state": "empty"}], [{"xy": [0, 11], "state": "empty"}, {"xy": [1, 11], "state": "empty"}, {"xy": [2, 11], "state": "empty"}, {"xy": [3, 11], "state": "empty"}, {"xy": [4, 11], "state": "empty"}, {"xy": [5, 11], "state": "empty"}, {"xy": [6, 11], "state": "empty"}, {"xy": [7, 11], "state": "empty"}, {"xy": [8, 11], "state": "empty"}, {"xy": [9, 11], "state": "empty"}, {"xy": [10, 11], "state": "empty"}, {"xy": [11, 11], "state": "empty"}, {"xy": [12, 11], "state": "empty"}, {"xy": [13, 11], "state": "empty"}, {"xy": [14, 11], "state": "empty"}, {"xy": [15, 11], "state": "empty"}, {"xy": [16, 11], "state": "empty"}, {"xy": [17, 11], "state": "empty"}, {"xy": [18, 11], "state": "empty"}, {"xy": [19, 11], "state": "empty"}], [{"xy": [0, 12], "state": "empty"}, {"xy": [1, 12], "state": "empty"}, {"xy": [2, 12], "state": "empty"}, {"xy": [3, 12], "state": "empty"}, {"xy": [4, 12], "state": "empty"}, {"xy": [5, 12], "state": "empty"}, {"xy": [6, 12], "state": "empty"}, {"xy": [7, 12], "state": "empty"}, {"xy": [8, 12], "state": "empty"}, {"xy": [9, 12], "state": "empty"}, {"state": "head", "xy": [10, 12], "snake": "Enemy 1"}, {"xy": [11, 12], "state": "empty"}, {"xy": [12, 12], "state": "empty"}, {"xy": [13, 12], "state": "empty"}, {"xy": [14, 12], "state": "empty"}, {"xy": [15, 12], "state": "empty"}, {"xy": [16, 12], "state": "food"}, {"xy": [17, 12], "state": "empty"}, {"xy": [18, 12], "state": "empty"}, {"xy": [19, 12], "state": "empty"}], [{"xy": [0, 13], "state": "empty"}, {"xy": [1, 13], "state": "empty"}, {"xy": [2, 13], "state": "empty"}, {"xy": [3, 13], "state": "empty"}, {"xy": [4, 13], "state": "empty"}, {"xy": [5, 13], "state": "empty"}, {"xy": [6, 13], "state": "empty"}, {"xy": [7, 13], "state": "empty"}, {"xy": [8, 13], "state": "empty"}, {"xy": [9, 13], "state": "empty"}, {"state": "body", "xy": [10, 13], "snake": "Enemy 1"}, {"xy": [11, 13], "state": "empty"}, {"xy": [12, 13], "state": "empty"}, {"xy": [13, 13], "state": "empty"}, {"xy": [14, 13], "state": "empty"}, {"xy": [15, 13], "state": "empty"}, {"xy": [16, 13], "state": "empty"}, {"xy": [17, 13], "state": "empty"}, {"xy": [18, 13], "state": "empty"}, {"xy": [19, 13], "state": "empty"}], [{"xy": [0, 14], "state": "empty"}, {"xy": [1, 14], "state": "empty"}, {"xy": [2, 14], "state": "empty"}, {"xy": [3, 14], "state": "empty"}, {"xy": [4, 14], "state": "empty"}, {"xy": [5, 14], "state": "empty"}, {"xy": [6, 14], "state": "empty"}, {"xy": [7, 14], "state": "empty"}, {"xy": [8, 14], "state": "empty"}, {"xy": [9, 14], "state": "empty"}, {"state": "body", "xy": [10, 14], "snake": "Enemy 1"}, {"xy": [11, 14], "state": "empty"}, {"xy": [12, 14], "state": "empty"}, {"xy": [13, 14], "state": "empty"}, {"xy": [14, 14], "state": "empty"}, {"xy": [15, 14], "state": "empty"}, {"xy": [16, 14], "state": "empty"}, {"xy": [17, 14], "state": "empty"}, {"xy": [18, 14], "state": "empty"}, {"xy": [19, 14], "state": "empty"}], [{"xy": [0, 15], "state": "empty"}, {"xy": [1, 15], "state": "empty"}, {"xy": [2, 15], "state": "empty"}, {"xy": [3, 15], "state": "empty"}, {"xy": [4, 15], "state": "empty"}, {"xy": [5, 15], "state": "empty"}, {"xy": [6, 15], "state": "empty"}, {"xy": [7, 15], "state": "empty"}, {"xy": [8, 15], "state": "empty"}, {"xy": [9, 15], "state": "empty"}, {"state": "body", "xy": [10, 15], "snake": "Enemy 1"}, {"xy": [11, 15], "state": "empty"}, {"xy": [12, 15], "state": "empty"}, {"xy": [13, 15], "state": "empty"}, {"xy": [14, 15], "state": "empty"}, {"xy": [15, 15], "state": "empty"}, {"xy": [16, 15], "state": "empty"}, {"xy": [17, 15], "state": "empty"}, {"xy": [18, 15], "state": "empty"}, {"xy": [19, 15], "state": "empty"}], [{"xy": [0, 16], "state": "empty"}, {"xy": [1, 16], "state": "empty"}, {"xy": [2, 16], "state": "empty"}, {"xy": [3, 16], "state": "empty"}, {"xy": [4, 16], "state": "empty"}, {"xy": [5, 16], "state": "empty"}, {"xy": [6, 16], "state": "empty"}, {"xy": [7, 16], "state": "food"}, {"xy": [8, 16], "state": "empty"}, {"xy": [9, 16], "state": "empty"}, {"xy": [10, 16], "state": "empty"}, {"xy": [11, 16], "state": "empty"}, {"xy": [12, 16], "state": "empty"}, {"xy": [13, 16], "state": "empty"}, {"xy": [14, 16], "state": "empty"}, {"xy": [15, 16], "state": "empty"}, {"xy": [16, 16], "state": "food"}, {"xy": [17, 16], "state": "empty"}, {"xy": [18, 16], "state": "empty"}, {"xy": [19, 16], "state": "empty"}], [{"xy": [0, 17], "state": "empty"}, {"xy": [1, 17], "state": "empty"}, {"xy": [2, 17], "state": "empty"}, {"xy": [3, 17], "state": "empty"}, {"xy": [4, 17], "state": "empty"}, {"xy": [5, 17], "state": "empty"}, {"xy": [6, 17], "state": "empty"}, {"xy": [7, 17], "state": "empty"}, {"xy": [8, 17], "state": "empty"}, {"xy": [9, 17], "state": "empty"}, {"xy": [10, 17], "state": "empty"}, {"xy": [11, 17], "state": "empty"}, {"xy": [12, 17], "state": "empty"}, {"xy": [13, 17], "state": "empty"}, {"xy": [14, 17], "state": "empty"}, {"xy": [15, 17], "state": "empty"}, {"xy": [16, 17], "state": "empty"}, {"xy": [17, 17], "state": "empty"}, {"xy": [18, 17], "state": "empty"}, {"xy": [19, 17], "state": "empty"}], [{"xy": [0, 18], "state": "empty"}, {"xy": [1, 18], "state": "empty"}, {"xy": [2, 18], "state": "empty"}, {"xy": [3, 18], "state": "empty"}, {"xy": [4, 18], "state": "empty"}, {"xy": [5, 18], "state": "empty"}, {"xy": [6, 18], "state": "empty"}, {"xy": [7, 18], "state": "empty"}, {"xy": [8, 18], "state": "empty"}, {"xy": [9, 18], "state": "empty"}, {"xy": [10, 18], "state": "empty"}, {"xy": [11, 18], "state": "empty"}, {"xy": [12, 18], "state": "empty"}, {"xy": [13, 18], "state": "empty"}, {"xy": [14, 18], "state": "empty"}, {"xy": [15, 18], "state": "empty"}, {"xy": [16, 18], "state": "empty"}, {"xy": [17, 18], "state": "empty"}, {"xy": [18, 18], "state": "empty"}, {"xy": [19, 18], "state": "empty"}], [{"xy": [0, 19], "state": "empty"}, {"xy": [1, 19], "state": "empty"}, {"xy": [2, 19], "state": "empty"}, {"xy": [3, 19], "state": "empty"}, {"xy": [4, 19], "state": "empty"}, {"xy": [5, 19], "state": "empty"}, {"xy": [6, 19], "state": "empty"}, {"xy": [7, 19], "state": "empty"}, {"xy": [8, 19], "state": "empty"}, {"xy": [9, 19], "state": "empty"}, {"xy": [10, 19], "state": "empty"}, {"xy": [11, 19], "state": "empty"}, {"xy": [12, 19], "state": "empty"}, {"xy": [13, 19], "state": "empty"}, {"xy": [14, 19], "state": "empty"}, {"xy": [15, 19], "state": "empty"}, {"xy": [16, 19], "state": "empty"}, {"xy": [17, 19], "state": "empty"}, {"xy": [18, 19], "state": "empty"}, {"xy": [19, 19], "state": "empty"}]], "food": [[2, 2], [7, 16], [16, 16], [16, 12], [13, 5]]}
+}! !
+
+!Battlesnake.WormHoleClient methodsFor: 'initialize'!
+
+mainPath() {
+	// *** This method was defined by AppeX.ApplicationClient as a subclass responsibility.
+	// Replace its body with a proper implementation. *** 
+
+	this.debug('Subclass responsibility stub not reimplemented');
+}! !
+
+!Battlesnake.WormHoleClient methodsFor: 'ajax'!
+
+testFailed(xhr, status, errorCode) {
+	console.log(xhr, status, errorCode);
+}!
+
+testRequest(data, url) {
+	var self = this,
+		jsonData = JSON.stringify(data);
+	$.ajax({
+		url: url,
+		type: "POST",
+		contentType: "application/x-www-form-urlencoded",
+		data: jsonData,
+		success: function(result, status, xhr) {self.testSuccess(result, status, xhr)},
+		error: function(xhr, status, errorCode) {self.testFailed(xhr, status, errorCode)}
+	})
+}!
+
+testSuccess(result, status, xhr){
+	console.log(result);
+}! !
+
+!Battlesnake.WormHoleClient methodsFor: 'battlesnake API'!
+
+testStart() {
+
+	this.testRequest(this.startData(), "../start");
+}!
+
+testMove() {
+	
+	this.testRequest(this.exampleGameData(), "../move");
+}! !
+
+
+!Battlesnake.Medusa methodsFor: 'accessing'!
+
+behaviors
+
+	behaviors isEmpty ifTrue: [ self setDefaultBehavior ].
+
+	^behaviors!
+
+bubble
+
+	^ bubble ifNil: [ bubble := self tilesWithinDistance: self bubbleSize]!
+
+currentBehavior
+
+	^currentBehavior ifNil: [ self nextBehavior ]!
+
+bubbleShift
+"
+	Answer a point that should be the direction of the bubble's shift.
+	All empty tiles have the weight equal to distance from the head.
+	Tiles with food have larger weight the closer they are to the head.
+"
+
+	| sumX sumY sumWeight dX dY shift |
+	
+	sumX := sumY := sumWeight := 0.
+	
+	self bubble do: [ :eachTile |
+		| eachWeight |
+		eachWeight := 0.
+		eachTile isEmpty
+			ifTrue: [
+"				eachWeight := self distanceTo: eachTile.
+"
+				eachWeight := 1.
+				]
+			ifFalse: [
+				eachWeight := self bubbleSize + 1 - (self distanceTo: eachTile).
+			].
+		eachTile isTraversable ifFalse: [
+			eachWeight := eachWeight negated.
+			].
+		sumX := sumX + (eachTile x * eachWeight).
+		sumY := sumY + (eachTile y * eachWeight).
+		sumWeight := sumWeight + eachWeight.
+		].
+	
+	dX := (sumX / sumWeight) - head x.
+	dY := (sumY / sumWeight) - head y.
+	
+	shift := dX abs > dY abs
+		ifTrue: [ dX sign @ 0 ]
+		ifFalse: [ 0 @ dY sign ].
+		
+	
+	^ shift!
+
+target: anObject
+
+	target := anObject!
+
+findPathToTarget
+	"
+	Find the best path to my current target.
+"
+
+	^ (self findPathTo: self target) ifNotNil: [ :newPath |
+		newPath do: [:eachTile | self becomeInterestedInTile: eachTile].
+		newPath ]!
+
+setDefaultBehavior
+"
+	Here is where we determine what out next strategy should be. Until that is finalized,
+	let's just set the 'find food' strategy is default.
+"
+
+	self addBehavior: #findFood!
+
+findPathTo: tileOrContent
+
+	path ifNotNil: [ path do: [ :eachTile | self loseInterestInTile: eachTile ]].
+	^ super findPathTo: tileOrContent!
+
+path
+
+	^ (path isNil or: [ path isEmpty ])
+		ifTrue: [ path := self findPathToTarget ]
+		ifFalse: [ path ]!
+
+nextMove
+	
+	^ nextMove!
+
+path: tiles
+"
+	Set my path to a collection of Tiles
+"
+	path := tiles!
+
+bubbleSize
+"
+	I am a Medusa. My bubble size is 3 moves ahead.
+"
+	^ 3!
+
+target
+
+	^target ifNil: [target := self findTarget]!
+
+findTarget
+"
+	Return a Tile or Food (possibly another Snake Head?) based on the current strategy.
+	For now, just return my tail's neighbor that is not a snake part.
+"
+
+	^ self tail neighbours detect: [ :any | any isEmpty ]! !
+
+!Battlesnake.Medusa methodsFor: 'actions'!
+
+becomeInterestedInTile: aTile
+
+	^aTile when: TileStateChanged send: #tileStateChanged: to: self!
+
+loseInterestInTile: eachTile
+
+	^eachTile retractInterestIn: TileStateChanged for: self!
+
+resetPath
+
+	path ifNotNil: [path do: [:eachTile | self loseInterestInTile: eachTile]].
+	path := nil!
+
+resetBubble
+
+	bubble := nil!
+
+findFoodsInBubble
+
+	| foods |
+	
+	foods := Set new.
+	 self bubble do: [ :eachTile | eachTile hasFood ifTrue: [ foods add: eachTile content ]
+		].
+	
+	^ foods!
+
+doMove
+"
+	Take the nextMove and move the head there. Then move the rest of the body.
+"
+
+	| nextTile currentTile currentSegment |
+	
+	nextTile := board at: (self position + nextMove).
+	currentSegment := head.
+	
+	[currentSegment isNil] whileFalse: [
+		currentTile := currentSegment tile.
+		nextTile content: currentSegment.
+		currentSegment := currentSegment nextSegment.
+		nextTile := currentTile.
+		]!
+
+findEnemiesInBubble
+"
+	Go through my bubble and for each tile that have a snake part in them that is not me, add that snake to the result.
+"
+
+	| enemies |
+	
+	enemies := Set new.
+	 self bubble do: [ :eachTile | eachTile snake
+		ifNotNil: [ :snake | snake ~~ self ifTrue: [ enemies add: snake ]]
+		].
+	
+	^ enemies!
+
+resetTarget
+
+	target := nil! !
+
+!Battlesnake.Medusa methodsFor: 'strategies'!
+
+goToPerimeter
+
+	^ [ self goToPerimeterBehavior ]!
+
+findFoodClosestToMe
+
+	^ board foods detect: [ :anyFood | self closestFood == anyFood ] ifNone: [ nil ]!
+
+moveTo: aTile
+
+	^ nextMove := aTile position - self position!
+
+huntSnakes
+"
+	This strategy method will implement the snake hunting algorithm.
+"!
+
+pushBehavior: aSymbol
+
+	behaviors addFirst: aSymbol!
+
+nextMoveDirection
+
+	^ Directions at: self nextMove ifAbsent: [ Directions any ]!
+
+findFoodIAmClosestTo
+
+	^ board foods detect: [ :anyFood | anyFood closestSnake == self ] ifNone: [ nil ]!
+
+escapeSnakes
+"
+	This strategy method will implement the snake escaping algorithm.
+"!
+
+findFood
+
+	^ [ self findFoodBehavior ]!
+
+moveAlong
+
+	^ [ self moveAlongBehavior ]! !
+
+!Battlesnake.Medusa methodsFor: 'initialize-release'!
+
+initialize
+	"Initialize a newly created instance. This method must answer the receiver."
+
+	super initialize.
+	snakeName := 'Medusa'.
+	behaviors := OrderedCollection new.! !
+
+!Battlesnake.Medusa methodsFor: 'behaviors'!
+
+insertBehavior: aSymbol before: anotherSymbol
+
+	^ behaviors add: aSymbol before: anotherSymbol!
+
+closestEdge
+
+	^ head tile closestEdge!
+
+moveAlongBehavior
+
+	| tile |
+	tile := self path removeFirst.
+	self loseInterestInTile: tile.
+	tile == self target tile ifTrue: [
+		self resetPath; resetTarget.
+		self nextBehavior
+		].
+	^ nextMove := tile position - head position!
+
+behave
+
+	^ (self perform: self currentBehavior) value!
+
+planBehavior
+"
+
+"
+	^ (self perform: self nextBehavior) value!
+
+addBehavior: aSymbol
+
+	behaviors add: aSymbol!
+
+nextBehavior
+"
+	ANswer a block which, when evaluated, will run the behaviour to plan moves.
+"
+	^ currentBehavior := self behaviors removeFirst!
+
+findFoodBehavior
+"
+	Return the next move when finding food
+"
+
+	| food |
+	
+	food := self findFoodIAmClosestTo ifNil: [ self findFoodClosestToMe].
+	
+	path := food
+		ifNil: [ self findPathTo: self tile neighbours any "Any move will do?" ]
+		ifNotNil: [ self findPathTo: food ].
+		
+	^ self moveTo: path removeFirst.!
+
+delayBehavior: aSymbol
+
+	behaviors addLast: aSymbol!
+
+goToPerimeterBehavior
+"
+	This strategy method is a placeholder to go the board perimeter.
+"
+
+	| edge |
+	
+	 edge := self closestEdge.
+	
+	path := edge
+		ifNil: [ self findPathTo: self tile neighbours any "Any move will do?" ]
+		ifNotNil: [ self findPathTo: edge ].
+		
+	^ self moveTo: path removeFirst.!
+
+resetBehaviors
+
+	behaviors := OrderedCollection new.! !
+
+!Battlesnake.Medusa methodsFor: 'accessing state'!
+
+startResponseState
+
+	| state response |
+
+	state := self state.	
+	response := #(#name #color #head_url #taunt) collect: [ :each | state associationAt: each ifAbsent: [nil]].
+	
+	^ Dictionary withAll: response! !
+
+!Battlesnake.Medusa methodsFor: 'notifications'!
+
+tileStateChanged: anAnnouncement! !
+
+
+!Core.Point methodsFor: 'accessing'!
+
+battlesnakeDistance
+
+	^ x abs + y abs! !
+
+
+!SiouX.Server class methodsFor: 'configuration'!
+
+battlesnakeServer: server
+
+	<server: 'Battlesnake Server'>
+	server listenOn: 8889 for: HttpConnection! !
+
+
+
+#{Battlesnake.Directions} initialize!
