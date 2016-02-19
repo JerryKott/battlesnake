@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 
 <st-source>
-<time-stamp>From VisualWorks®, Pre-Release 8.2 (feb16.1) of 5 February, 2016 on 18 February, 2016 at 5:19:01 PM</time-stamp>
+<time-stamp>From VisualWorks®, Pre-Release 8.2 (feb16.1) of 5 February, 2016 on 18 February, 2016 at 6:42:04 PM</time-stamp>
 
 
 <component-created>
 <name>Battlesnake-Tests</name> <type>package</type>
-</component-created><!-- Package Battlesnake-Tests(0.0.15,jkott)= -->
+</component-created><!-- Package Battlesnake-Tests(0.0.16,jkott)= -->
 
 
 <component-property>
@@ -114,13 +114,19 @@
 <methods>
 <class-id>Battlesnake.GameTest</class-id> <category>tests</category>
 
-<body package="Battlesnake-Tests" selector="testGetIndex">testGetIndex	| response |	response := HttpClient get: (self urlString: '/').		self assert: response notNil.	self assert: response code = '200'.	self assert: (response contents beginsWith: '&lt;a href="https://github.com/JerryKott/battlesnake"&gt;Medusa&lt;/a&gt;').</body>
+<body package="Battlesnake-Tests" selector="newGameState">newGameState		^ Dictionary		with: #game_id -&gt; 'test-game'		with: #width -&gt; 20		with: #height -&gt; 20</body>
+
+<body package="Battlesnake-Tests" selector="testPostEnd">testPostEnd	| request response state decoded |	state := self newGameState.	request := Net.HttpRequest get: (self urlString: '/end').	state keysAndValuesDo: [ :key :value | request addFormKey: key value: (JSON encode: value) ].	response := request execute.		self assert: response notNil.	self assert: response isSuccess.	self assert: response contentType = 'application/json'.	decoded := JSON decode: response contents.	self assert: decoded notNil.	self assert: decoded keys sorted = #(color head_url name taunt)</body>
+
+<body package="Battlesnake-Tests" selector="moveState">moveState	^ Game exampleGame		turn: 5;			state.</body>
+
+<body package="Battlesnake-Tests" selector="testPostStart">testPostStart	| request response state decoded |	state := self newGameState.	request := Net.HttpRequest post: (self urlString: '/start').	state keysAndValuesDo: [ :key :value | request addFormKey: key value: (JSON encode: value) ].	response := request execute.		self assert: response notNil.	self assert: response isSuccess.	self assert: response contentType = 'application/json'.	decoded := JSON decode: response contents.	self assert: decoded notNil.	self assert: decoded keys sorted = #(color head_url name taunt)</body>
 
 <body package="Battlesnake-Tests" selector="testGameCreation">testGameCreation	| game state |	state := self newGameState.	game := Game fromState: state.		self assert: game medusa class == Medusa.	self assert: game board isEmpty.	self assert: game gameName = (state at: #game_id).	self assert: game board width = (state at: #width).	self assert: game board height = (state at: #height).	self assert: game medusa power = 0.	self assert: game medusa head isNil</body>
 
-<body package="Battlesnake-Tests" selector="newGameState">newGameState		^ Dictionary		with: #game_id -&gt; 'test-game'		with: #width -&gt; 20		with: #height -&gt; 20</body>
+<body package="Battlesnake-Tests" selector="testGetIndex">testGetIndex	| response |	response := HttpClient get: (self urlString: '/').		self assert: response notNil.	self assert: response code = '200'.	self assert: (response contents beginsWith: '&lt;a href="https://github.com/JerryKott/battlesnake"&gt;Medusa&lt;/a&gt;').</body>
 
-<body package="Battlesnake-Tests" selector="testPostStart">testPostStart	| request response state decoded |	state := self newGameState.	request := Net.HttpRequest get: (self urlString: '/start').	state keysAndValuesDo: [ :key :value | request addFormKey: key value: (JSON encode: value) ].	response := request execute.		self assert: response notNil.	self assert: response isSuccess.	self assert: response contentType = 'application/json'.	decoded := JSON decode: response contents.	self assert: decoded notNil.	self assert: decoded keys sorted = #(color head_url name taunt)</body>
+<body package="Battlesnake-Tests" selector="testPostMove">testPostMove	| request response state decoded |	state := self moveState.	request := Net.HttpRequest post: (self urlString: '/move').	state keysAndValuesDo: [ :key :value | request addFormKey: key value: (JSON encode: value) ].	response := request execute.		self assert: response notNil.	self assert: response isSuccess.	self assert: response contentType = 'application/json'.	decoded := JSON decode: response contents.	self assert: decoded notNil.	self assert: decoded keys sorted = #(color head_url name taunt)</body>
 </methods>
 
 <methods>

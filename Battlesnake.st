@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 
 <st-source>
-<time-stamp>From VisualWorks®, Pre-Release 8.2 (feb16.1) of 5 February, 2016 on 18 February, 2016 at 5:18:38 PM</time-stamp>
+<time-stamp>From VisualWorks®, Pre-Release 8.2 (feb16.1) of 5 February, 2016 on 18 February, 2016 at 6:41:52 PM</time-stamp>
 
 
 <component-created>
 <name>Battlesnake</name> <type>package</type>
-</component-created><!-- Package Battlesnake(0.0.22,jkott)= -->
+</component-created><!-- Package Battlesnake(0.0.23,jkott)= -->
 
 
 <component-property>
@@ -227,7 +227,8 @@
 <inst-vars></inst-vars>
 <class-inst-vars>activeGame </class-inst-vars>
 <imports>
-			Xtreams.*
+			private OS.*
+			private Xtreams.*
 			</imports>
 <category></category>
 <attributes>
@@ -710,7 +711,7 @@
 
 <body package="Battlesnake" selector="jsonState">jsonState		^ self class jsonEncode: self state</body>
 
-<body package="Battlesnake" selector="state">state	^ Dictionary new		at: #game_id put: gameName;		at: #turn put: turn;		at: #board put: board state;		at: #snakes put: (self snakes collect: #state);		at: #food put: (self foods collect: [ :eachFood | Array with: eachFood x with: eachFood y]);		yourself</body>
+<body package="Battlesnake" selector="state">state	^ Dictionary new		at: #game_id put: gameName;		at: #turn put: turn;		at: #board put: board state;		at: #snakes put: (self snakes collect: #state);		at: #food put: (self foods values collect: [ :eachFood | Array with: eachFood x with: eachFood y]);		yourself</body>
 </methods>
 
 <methods>
@@ -871,9 +872,9 @@
 
 <body package="Battlesnake" selector="htmlDocument">htmlDocument"	Battlesnake rules specify that GET / returns a string with a link to our source code repository."	&lt;GET&gt;	&lt;plainText: ''&gt;	^ '&lt;a href="https://github.com/JerryKott/battlesnake"&gt;Medusa&lt;/a&gt;&lt;p&gt;This paragraph and the following will need to be removed for the actual game. It is here for testing purposes.&lt;/p&gt;&lt;a href="/start?data=start%20the%20game"&gt;Send a &lt;b&gt;START&lt;/b&gt; request.&lt;/a&gt;&lt;br&gt;&lt;a href="/move?data=send%20us%20your%20board"&gt;Send a &lt;b&gt;MOVE&lt;/b&gt; request.&lt;/a&gt;&lt;br&gt;&lt;a href="/end?data=stop%20the%20game"&gt;Send an &lt;b&gt;END&lt;/b&gt; request.&lt;/a&gt;&lt;br&gt;'</body>
 
-<body package="Battlesnake" selector="move">move""	&lt;json: 'move'&gt;	&lt;GET&gt;	&lt;POST&gt;		| formData |	formData := self currentRequestData.			^ (Dictionary withAll: formData data)		add: 'comment' -&gt; 'This is where we will respond with our snake''s next move.';		yourself</body>
+<body package="Battlesnake" selector="move">move""	&lt;json: 'move'&gt;	&lt;GET&gt;	&lt;POST&gt;		| state |	state := self decodeRequest.	^ (Dictionary withAll: state)		add: 'comment' -&gt; 'This is where we will respond with our snake''s next move.';		yourself</body>
 
-<body package="Battlesnake" selector="decodeRequest">decodeRequest	| data formData |	formData := self currentRequestData.	data := formData data				collect: [:each | each key asSymbol -&gt; (JSON decode: each value)].	^Dictionary withAll: data</body>
+<body package="Battlesnake" selector="decodeRequest">decodeRequest	| data formData uri query |	formData := self currentRequestData.	query := formData data first key.	uri := URI fromEncodedString: '/?', query.	data := Dictionary new.	uri queryKeysAndValuesDo: [ :key :value |		| valueString |		valueString := URLEncoder decode: value.		data at: key asSymbol put: (JSON decode: valueString)		].		^ data</body>
 
 <body package="Battlesnake" selector="end">end""	&lt;json: 'end'&gt;	&lt;GET&gt;	&lt;POST&gt;		| formData |	formData := self currentRequestData.			^ (Dictionary withAll: formData data)		add: 'comment' -&gt; 'This is where we will end the game.';		yourself</body>
 </methods>
