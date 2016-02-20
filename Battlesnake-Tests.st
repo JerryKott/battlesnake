@@ -1,7 +1,7 @@
-'From VisualWorks®, 8.1 of 24 July, 2015 on 19 February, 2016 at 5:30:48 PM'!
+'From VisualWorks®, 8.1 of 24 July, 2015 on 19 February, 2016 at 6:08:35 PM'!
 
 
-CodeComponent create: #package named: 'Battlesnake-Tests'!"Package Battlesnake-Tests(0.5,jkott)="!
+CodeComponent create: #package named: 'Battlesnake-Tests'!"Package Battlesnake-Tests(0.6,jkott)="!
 
 
 CodeComponent type: #package named: 'Battlesnake-Tests' property: #prerequisiteParcels value: #(#('Battlesnake' '') #('SUnit' '') #('SUnitToo' ''))!
@@ -186,6 +186,7 @@ testStartToEnd
 
 testPostMove
 
+	self runPostStart.
 	self runPostMove!
 
 testGetIndex
@@ -199,6 +200,7 @@ testGetIndex
 
 testPostEnd
 
+	self runPostStart.
 	self runPostEnd!
 
 testPostStart
@@ -227,7 +229,7 @@ newRequestFor: stateData path: path
 runPostEnd
 
 	| request response state decoded |
-	state := self newGameState.
+	state := self endGameState.
 	request := self newRequestFor: state path: '/end'.
 	response := request execute.
 	
@@ -236,7 +238,8 @@ runPostEnd
 	self assert: response contentType = 'application/json'.
 	decoded := JSON decode: response contents.
 	self assert: decoded notNil.
-	self assert: decoded keys sorted = #(color head_url name taunt)!
+	self assert: decoded keys sorted = #(status).
+	self assert: (decoded at: #status) = 'Game Over'!
 
 runPostMove
 
@@ -257,7 +260,7 @@ runPostStart
 	"state keysAndValuesDo: [ :key :value | request addFormKey: key value: value ]."
 
 	| request response state decoded |
-	state := self newGameState.
+	state := self startGameState.
 	request := self newRequestFor: state path: '/start'.
 	response := request execute.
 	self assert: response notNil.
@@ -269,7 +272,11 @@ runPostStart
 
 !Battlesnake.GameTest methodsFor: 'tests'!
 
-newGameState
+endGameState
+	
+	^ Dictionary with: #game_id -> 'test-game'!
+
+startGameState
 	
 	^ Dictionary
 		with: #game_id -> 'test-game'
@@ -286,7 +293,7 @@ moveState
 testGameCreation
 
 	| game state |
-	state := self newGameState.
+	state := self startGameState.
 	game := Game fromState: state.
 	
 	self assert: game medusa class == Medusa.

@@ -1,7 +1,7 @@
-'From VisualWorks®, 8.1 of 24 July, 2015 on 19 February, 2016 at 5:30:31 PM'!
+'From VisualWorks®, 8.1 of 24 July, 2015 on 19 February, 2016 at 6:08:13 PM'!
 
 
-CodeComponent create: #package named: 'Battlesnake'!"Package Battlesnake(0.5,jkott)="!
+CodeComponent create: #package named: 'Battlesnake'!"Package Battlesnake(0.6,jkott)="!
 
 
 CodeComponent type: #package named: 'Battlesnake' property: #prerequisiteParcels value: #(#('SiouX-Server' '') #('Xtreams-Transforms' '') #('AppeX-Core' '') #('SiouX-Tools' '') #('AppeX-Tools' ''))!
@@ -2234,11 +2234,25 @@ end
 	<GET>
 	<POST>
 	
-	| formData |
-	formData := self currentRequestData.
+	
+	| state game gameId response |
+	
+	state := self decodeFormDataRequest.
+	response := Dictionary new.
+	
+	gameId := state at: #game_id.
+	game := self activeGame.
+	(game isNil or: [game gameName ~= gameId]) ifTrue: [
+		^ response
+			at: #status put: 'No such game in progress';
+			yourself
+		].
+
+	self activeGame: nil.
+	
 		
-	^ (Dictionary withAll: formData data)
-		add: 'comment' -> 'This is where we will end the game.';
+	^ response
+		at: #status put: 'Game Over';
 		yourself! !
 
 !Battlesnake.WormHole class methodsFor: 'encoding - decoding'!
