@@ -1,29 +1,20 @@
-'From VisualWorks®, 8.1 of 24 July, 2015 on 19 February, 2016 at 1:56:21 AM'!
+'From VisualWorks®, 8.1 of 24 July, 2015 on 19 February, 2016 at 5:30:48 PM'!
 
 
-CodeComponent create: #package named: 'Battlesnake-Tests'!"Package Battlesnake-Tests(0.0.18,jkott)="!
+CodeComponent create: #package named: 'Battlesnake-Tests'!"Package Battlesnake-Tests(0.5,jkott)="!
 
 
-CodeComponent type: #package named: 'Battlesnake-Tests' property: #prerequisiteParcels value: #(#('Battlesnake' '') #('Battlesnake-Snakesonaplane' '') #('SUnit' '') #('SUnitToo' ''))!
+CodeComponent type: #package named: 'Battlesnake-Tests' property: #prerequisiteParcels value: #(#('Battlesnake' '') #('SUnit' '') #('SUnitToo' ''))!
 
-CodeComponent type: #package named: 'Battlesnake-Tests' property: #developmentPrerequisites value: #(#(#any 'Battlesnake' '') #(#any 'Battlesnake-Snakesonaplane' '') #(#any 'SUnit' '') #(#any 'SUnitToo' ''))!
+CodeComponent type: #package named: 'Battlesnake-Tests' property: #developmentPrerequisites value: #(#(#any 'Battlesnake' '') #(#any 'SUnit' '') #(#any 'SUnitToo' ''))!
 
-CodeComponent type: #package named: 'Battlesnake-Tests' property: #prerequisiteDescriptions value: #(#(#name 'Battlesnake' #componentType #package) #(#name 'Battlesnake-Snakesonaplane' #componentType #package) #(#name 'SUnit' #componentType #package) #(#name 'SUnitToo' #componentType #package))!
+CodeComponent type: #package named: 'Battlesnake-Tests' property: #prerequisiteDescriptions value: #(#(#name 'Battlesnake' #componentType #package) #(#name 'SUnit' #componentType #package) #(#name 'SUnitToo' #componentType #package))!
 
 Smalltalk.Battlesnake defineClass: #SnakeTest
 	superclass: #{SUnit.TestCase}
 	indexedType: #none
 	private: false
 	instanceVariableNames: 'board snake '
-	classInstanceVariableNames: ''
-	imports: ''
-	category: ''!
-
-Smalltalk.Battlesnake defineClass: #TestObstacle
-	superclass: #{Battlesnake.TileContent}
-	indexedType: #none
-	private: false
-	instanceVariableNames: ''
 	classInstanceVariableNames: ''
 	imports: ''
 	category: ''!
@@ -43,6 +34,15 @@ Smalltalk.Battlesnake defineClass: #GameTest
 
 Smalltalk.Battlesnake defineClass: #BoardTest
 	superclass: #{SUnit.TestCase}
+	indexedType: #none
+	private: false
+	instanceVariableNames: ''
+	classInstanceVariableNames: ''
+	imports: ''
+	category: ''!
+
+Smalltalk.Battlesnake defineClass: #TestObstacle
+	superclass: #{Battlesnake.TileContent}
 	indexedType: #none
 	private: false
 	instanceVariableNames: ''
@@ -78,7 +78,7 @@ testMedusaBubble
 	| coordinates bubble bubbleShift |
 	coordinates := #(#(3 5) #(3 6) #(3 7) #(4 7)).
 	snake := Medusa on: board.
-	snake coordinates: coordinates.
+	snake updateCoordinates: coordinates.
 
 	bubble := snake bubble.
 	self assert: bubble size > 0.
@@ -88,33 +88,12 @@ testMedusaBubble
 	self assert: (bubbleShift x between: -1 and: 1).
 	self assert: (bubbleShift y between: -1 and: 1).!
 
-testNewSnake
-
-	| head |
-	snake := Snake on: board.
-
-	self assert: snake head isNil.
-	self assert: snake segments isEmpty.
-	self assert: snake tail isNil.
-	
-	snake coordinates: #(#(3, 5)).
-	
-	head := snake head.
-	self assert: head notNil.
-	self assert: head class == Head.
-	self assert: head isSnakePart.
-	self assert: head isSnakeHead. 
-	self assert: head tile position = (3 @ 5).
-	self assert: snake power = 1.
-	self assert: snake tail == head.
-	self assert: head tailLength = 0!
-
 testSnakeBody
 
 	| coordinates head count tail |
 	coordinates := #(#(3 5) #(3 6) #(3 7) #(4 7)).
 	snake := Snake on: board.
-	snake coordinates: coordinates.
+	snake updateCoordinates: coordinates.
 	head := snake head.
 	tail := snake tail.
 	
@@ -140,6 +119,27 @@ testSnakeBody
 	self assert: tail isSnakeBody.
 	self assert: tail isSnakeHead not.
 	self assert: tail tailLength = 0.!
+
+testNewSnake
+
+	| head |
+	snake := Snake on: board.
+
+	self assert: snake head isNil.
+	self assert: snake segments isEmpty.
+	self assert: snake tail isNil.
+	
+	snake updateCoordinates: #(#(3, 5)).
+	
+	head := snake head.
+	self assert: head notNil.
+	self assert: head class == Head.
+	self assert: head isSnakePart.
+	self assert: head isSnakeHead. 
+	self assert: head tile position = (3 @ 5).
+	self assert: snake power = 1.
+	self assert: snake tail == head.
+	self assert: head tailLength = 0!
 
 testSnakeFindFood
 
@@ -173,16 +173,86 @@ testSnakeFindFood
 		]! !
 
 
-!Battlesnake.TestObstacle methodsFor: 'accessing state'!
-
-stateDescription
-	
-	^ 'obstacle'! !
-
-
 !Battlesnake.GameTest methodsFor: 'tests - HTTP'!
 
+testStartToEnd
+
+	WormHole resetGame.
+
+	self
+		runPostStart;
+		runPostMove;
+		runPostEnd!
+
+testPostMove
+
+	self runPostMove!
+
+testGetIndex
+
+	| response |
+	response := HttpClient get: (self urlString: '/').
+	
+	self assert: response notNil.
+	self assert: response code = '200'.
+	self assert: response contents = '<a href="https://github.com/JerryKott/battlesnake">Medusa</a>'.!
+
+testPostEnd
+
+	self runPostEnd!
+
 testPostStart
+
+	self runPostStart! !
+
+!Battlesnake.GameTest methodsFor: 'accessing'!
+
+hostPortString
+
+	^ host, ':', port printString!
+
+urlString: path
+
+	^ 'http://', self hostPortString, path!
+
+newRequestFor: stateData path: path
+
+	| request |
+	request := Net.HttpRequest post: (self urlString: path).
+	request contents: (WormHole encodeFormData: stateData).
+	^request! !
+
+!Battlesnake.GameTest methodsFor: 'running tests'!
+
+runPostEnd
+
+	| request response state decoded |
+	state := self newGameState.
+	request := self newRequestFor: state path: '/end'.
+	response := request execute.
+	
+	self assert: response notNil.
+	self assert: response isSuccess.
+	self assert: response contentType = 'application/json'.
+	decoded := JSON decode: response contents.
+	self assert: decoded notNil.
+	self assert: decoded keys sorted = #(color head_url name taunt)!
+
+runPostMove
+
+	| request response state decoded |
+	state := self moveState.
+	request := self newRequestFor: state path: '/move'.
+	response := request execute.
+	
+	self assert: response notNil.
+	self assert: response isSuccess.
+	self assert: response contentType = 'application/json'.
+	decoded := JSON decode: response contents.
+	self assert: decoded notNil.
+	self assert: decoded keys sorted = #(move taunt)!
+
+runPostStart
 
 	"state keysAndValuesDo: [ :key :value | request addFormKey: key value: value ]."
 
@@ -195,70 +265,9 @@ testPostStart
 	self assert: response contentType = 'application/json'.
 	decoded := JSON decode: response contents.
 	self assert: decoded notNil.
-	self assert: decoded keys sorted = #(#color #head_url #name #taunt)!
-
-testGetIndex
-
-	| response |
-	response := HttpClient get: (self urlString: '/').
-	
-	self assert: response notNil.
-	self assert: response code = '200'.
-	self assert: (response contents beginsWith: '<a href="https://github.com/JerryKott/battlesnake">Medusa</a>').!
-
-testPostMove
-
-	| request response state decoded |
-	state := self moveState.
-	request := self newRequestFor: state path: '/move'.
-	response := request execute.
-	
-	self assert: response notNil.
-	self assert: response isSuccess.
-	self assert: response contentType = 'application/json'.
-	decoded := JSON decode: response contents.
-	self assert: decoded notNil.
-	self assert: decoded keys sorted = #(color head_url name taunt)!
-
-testPostEnd
-
-	| request response state decoded |
-	state := self newGameState.
-	request := self newRequestFor: state path: '/end'.
-	response := request execute.
-	
-	self assert: response notNil.
-	self assert: response isSuccess.
-	self assert: response contentType = 'application/json'.
-	decoded := JSON decode: response contents.
-	self assert: decoded notNil.
-	self assert: decoded keys sorted = #(color head_url name taunt)! !
-
-!Battlesnake.GameTest methodsFor: 'accessing'!
-
-urlString: path
-
-	^ 'http://', self hostPortString, path!
-
-newRequestFor: stateData path: path
-
-	| request |
-	request := Net.HttpRequest post: (self urlString: path).
-	request contents: (WormHole encodeFormData: stateData).
-	^request!
-
-hostPortString
-
-	^ host, ':', port printString! !
+	self assert: decoded keys sorted = #(#color #head_url #name #taunt)! !
 
 !Battlesnake.GameTest methodsFor: 'tests'!
-
-moveState
-
-
-	^ Game exampleGame
-		turn: 5;	
-		state.!
 
 newGameState
 	
@@ -266,6 +275,13 @@ newGameState
 		with: #game_id -> 'test-game'
 		with: #width -> 20
 		with: #height -> 20!
+
+moveState
+
+
+	^ Game exampleGame
+		turn: 5;	
+		state.!
 
 testGameCreation
 
@@ -295,22 +311,14 @@ setUp
 
 !Battlesnake.BoardTest methodsFor: 'testing'!
 
-testSimplePath
+testExampleBoard
 
-	|myBoard path start end |
+	| board |
 	
-	myBoard:= Board defaultBoard.
+	board := Board exampleBoard.
 	
-	(Array
-		with: ((2 @ 3) corner: (7 @ 7))
-		with: ((10 @ 15) corner: (7 @ 7))
-		with: ((2 @ 15) corner: (7 @ 7))
-		with: ((10 @ 3) corner: (7 @ 7))) do: [ :rectangle |
-			start := myBoard at: rectangle origin.
-			end := myBoard at: rectangle corner.
-			path := start simplePathTo: end.
-			self assert: path size = (start distanceTo: end)			
-			]!
+	self assert: board snakes notEmpty.
+	self assert: board foods notEmpty.!
 
 testBestPathWithObstacles
 
@@ -369,15 +377,6 @@ testInsideNeighbours
 			self assert: tile south west north east == tile.
 			]
 		]!
-
-testExampleBoard
-
-	| board |
-	
-	board := Board exampleBoard.
-	
-	self assert: board snakes notEmpty.
-	self assert: board foods notEmpty.!
 
 testBestPath
 
@@ -452,13 +451,38 @@ testCorners
 
 testNodeDistances
 
-	| board size startNode endNode |
+	| board size node |
 	size := 20 @ 20.
 	board := Board width: size x height: size y.
-	startNode := PathNode on: (board at: 0 @ 0).
-	endNode := PathNode on: (board at: (size x - 1) @ (size y - 1)).
+	node := PathNode
+		on: board topLeft
+		target: board bottomRight .
 	
-	self assert: (startNode distanceTo: endNode) = (size x + size y - 2)! !
+	self assert: node distanceToTarget = (size x + size y - 2)!
+
+testSimplePath
+
+	|myBoard path start end |
+	
+	myBoard:= Board defaultBoard.
+	
+	(Array
+		with: ((2 @ 3) corner: (7 @ 7))
+		with: ((10 @ 15) corner: (7 @ 7))
+		with: ((2 @ 15) corner: (7 @ 7))
+		with: ((10 @ 3) corner: (7 @ 7))) do: [ :rectangle |
+			start := myBoard at: rectangle origin.
+			end := myBoard at: rectangle corner.
+			path := start simplePathTo: end.
+			self assert: path size = (start distanceTo: end)			
+			]! !
+
+
+!Battlesnake.TestObstacle methodsFor: 'accessing state'!
+
+stateDescription
+	
+	^ 'obstacle'! !
 
 
 !Battlesnake.BattlesnakeTest methodsFor: 'tests'!
@@ -466,6 +490,14 @@ testNodeDistances
 testJakeSnake! !
 
 !Battlesnake.BattlesnakeTest methodsFor: 'running'!
+
+startData
+
+	^ Dictionary new
+		at: #game_id put: 'hairy-cheese';
+		at: #width put: 20;
+		at: #height put: 20;
+		yourself!
 
 boardStateData
 	"
@@ -490,42 +522,7 @@ runTest: aReceiver
 
 	| startData |
 	
-	startData := Dictionary new!
-
-startData
-
-	^ Dictionary new
-		at: #game_id put: 'hairy-cheese';
-		at: #width put: 20;
-		at: #height put: 20;
-		yourself! !
-
-
-!Battlesnake.Game class methodsFor: 'instance creation'!
-
-exampleGame
-"
-	(self exampleGame)
-"
-	| board |
-	
-	board := Board exampleBoard.
-	^ self new
-		gameName: 'Example Game';
-		board: board;
-		medusa: (board snakes at: 'Medusa');
-		turn: 0;
-		yourself! !
-
-
-!Battlesnake.Food class methodsFor: 'instance creation'!
-
-exampleCoordinates
-"
-	Return an Array of Points with the coordinates of food.
-"
-
-	^ #(#(2 2) #(13 5) #(16 12) #(7 16 ) #(16 16)) collect: [ :each | each first @ each last]! !
+	startData := Dictionary new! !
 
 
 !Battlesnake.Board class methodsFor: 'instance creation'!
@@ -559,6 +556,33 @@ putTestObstacleAt: aPoint
 	obstacle tile: tile.! !
 
 
+!Battlesnake.Game class methodsFor: 'instance creation'!
+
+exampleGame
+"
+	(self exampleGame)
+"
+	| board |
+	
+	board := Board exampleBoard.
+	^ self new
+		gameName: 'Example Game';
+		board: board;
+		medusa: (board snakes at: 'Medusa');
+		turn: 0;
+		yourself! !
+
+
+!Battlesnake.Food class methodsFor: 'instance creation'!
+
+exampleCoordinates
+"
+	Return an Array of Points with the coordinates of food.
+"
+
+	^ #(#(2 2) #(13 5) #(16 12) #(7 16 ) #(16 16)) collect: [ :each | each first @ each last]! !
+
+
 !Battlesnake.Snake class methodsFor: 'example snakes'!
 
 exampleOn: aBoard
@@ -568,7 +592,24 @@ exampleOn: aBoard
 
 	^(self on: aBoard)
 		snakeName: 'example-snake';
-		coordinates: #(#(4 6) #(4 7) #(4 8) #(5 8) #(6 8));
+		updateCoordinates: #(#(4 6) #(4 7) #(4 8) #(5 8) #(6 8));
+		yourself!
+
+exampleEnemy1_on: aBoard
+"
+	self exampleEnemy1_on: Board defaultBoard
+"
+
+	^ aBoard updateSingleSnakeState: self exampleEnemy1_state!
+
+exampleEnemy1_state
+"
+	self exampleEnemy1_state
+"
+
+	^ Dictionary new
+		at: #name put: 'Enemy 1';
+		at: #coords put: #(#(10 12) #(10 13) #(10 14) #(10 15));
 		yourself!
 
 exampleMedusaOn: aBoard
@@ -577,8 +618,8 @@ exampleMedusaOn: aBoard
 "
 
 	^(Medusa on: aBoard)
-		snakeName: 'Medusa';
-		coordinates: #(#(7 8) #(6 8 ) #(5 8) #(5 9) #(5 10) #(4 10));
+		snakeName: Medusa defaultSnakeName;
+		updateCoordinates: #(#(7 8) #(6 8 ) #(5 8) #(5 9) #(5 10) #(4 10));
 		yourself!
 
 exampleEnemy2_on: aBoard
@@ -588,25 +629,7 @@ exampleEnemy2_on: aBoard
 
 	^(self on: aBoard)
 		snakeName: 'Enemy 2';
-		coordinates: #(#(11 5) #(11 4) #(10 4) #(10 3) #(10 2) #(11 2) #(12 2) #(13 2));
-		yourself!
-
-exampleEnemy1_on: aBoard
-"
-	self exampleEnemy1_on: Board defaultBoard
-"
-
-	^(self on: aBoard)
-		snakeName: 'Enemy 1';
-		coordinates: #(#(10 12) #(10 13) #(10 14) #(10 15));
-		yourself!
-
-exampleSnakes: aBoard
-
-	^ Set new
-		add: (self exampleMedusaOn: aBoard);
-		add: (self exampleEnemy1_on: aBoard);
-		add: (self exampleEnemy2_on: aBoard);
+		updateCoordinates: #(#(11 5) #(11 4) #(10 4) #(10 3) #(10 2) #(11 2) #(12 2) #(13 2));
 		yourself!
 
 exampleNoodlezOn: aBoard
@@ -616,6 +639,14 @@ exampleNoodlezOn: aBoard
 
 	^(self on: aBoard)
 		snakeName: 'Noodlez';
-		coordinates: #(#(0 0) #(0 1) #(0 2) #(1 2));
+		updateCoordinates: #(#(0 0) #(0 1) #(0 2) #(1 2));
+		yourself!
+
+exampleSnakes: aBoard
+
+	^ Set new
+		add: (self exampleMedusaOn: aBoard);
+		add: (self exampleEnemy1_on: aBoard);
+		add: (self exampleEnemy2_on: aBoard);
 		yourself! !
 
