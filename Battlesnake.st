@@ -1,7 +1,7 @@
-'From VisualWorks®, 8.1 of 24 July, 2015 on 19 February, 2016 at 6:08:13 PM'!
+'From VisualWorks®, 8.1 of 24 July, 2015 on 19 February, 2016 at 11:54:30 PM'!
 
 
-CodeComponent create: #package named: 'Battlesnake'!"Package Battlesnake(0.6,jkott)="!
+CodeComponent create: #package named: 'Battlesnake'!"Package Battlesnake(0.10,jkott)="!
 
 
 CodeComponent type: #package named: 'Battlesnake' property: #prerequisiteParcels value: #(#('SiouX-Server' '') #('Xtreams-Transforms' '') #('AppeX-Core' '') #('SiouX-Tools' '') #('AppeX-Tools' ''))!
@@ -77,7 +77,7 @@ Smalltalk.Battlesnake defineClass: #Medusa
 	indexedType: #none
 	private: false
 	instanceVariableNames: 'behaviors path bubble target nextMove currentBehavior '
-	classInstanceVariableNames: ''
+	classInstanceVariableNames: 'snake '
 	imports: ''
 	category: ''!
 
@@ -125,7 +125,7 @@ Smalltalk.Battlesnake defineClass: #PathNode
 	superclass: #{Core.Object}
 	indexedType: #none
 	private: false
-	instanceVariableNames: 'tile gCost hCost parentNode distanceFromStart target fCost '
+	instanceVariableNames: 'tile costFromStart costToTarget parentNode distanceFromStart target costOfTravel costOfRisk '
 	classInstanceVariableNames: ''
 	imports: ''
 	category: ''!
@@ -205,6 +205,24 @@ Smalltalk.Battlesnake defineSharedVariable: #Directions
 	initializer: 'Dictionary with: (0 @ -1) -> #up with: (0 @ 1) -> #down with: (-1 @ 0) -> #left with: (1 @ 0) -> #right'!
 
 
+Smalltalk.Battlesnake defineSharedVariable: #HighPassingCost
+	private: false
+	constant: false
+	category: 'accessing'
+	initializer: '
+	"
+	High number representing non-passable content.
+	"
+	16rFFFFFFF'!
+
+
+Smalltalk.Battlesnake defineSharedVariable: #RiskCost
+	private: false
+	constant: false
+	category: 'accessing'
+	initializer: '100'!
+
+
 Smalltalk.Battlesnake defineSharedVariable: #StepCost
 	private: false
 	constant: false
@@ -234,13 +252,17 @@ width: width height: height
 
 !Battlesnake.Board methodsFor: 'accessing'!
 
-bottomLeft
-
-	^ rows last first!
-
 topLeft
 
 	^ rows first first!
+
+topRight
+
+	^ rows first last!
+
+nearTopRight
+
+	^ self bottomRight south south west west!
 
 cornerTiles
 
@@ -249,6 +271,10 @@ cornerTiles
 		with: self topRight
 		with: self bottomRight
 		with: self bottomLeft!
+
+nearBottomLeft
+
+	^ self bottomLeft north north east east!
 
 at: aPoint
 "
@@ -277,9 +303,17 @@ bottomRight
 
 	^ rows last last!
 
+nearTopLeft
+
+	^ self bottomLeft south south east east!
+
 foods
 
 	^foods!
+
+nearBottomRight
+
+	^ self bottomRight north north west west!
 
 rows
 
@@ -289,9 +323,9 @@ directions
 
 	^ self class directions!
 
-topRight
+bottomLeft
 
-	^ rows first last! !
+	^ rows last first! !
 
 !Battlesnake.Board methodsFor: 'testing'!
 
@@ -533,13 +567,6 @@ snake
 
 	^ content ifNotNil: [ content snake ]!
 
-highPassingCost
-"
-	Answer a high number representing basically a non-passable content.
-"
-
-	^ 16rFFFFFFF!
-
 position
 
 	^position!
@@ -641,7 +668,7 @@ passingCostIn: numberOfMoves for: aMedusa
 	
 	^ (content tailLength < numberOfMoves)
 		ifTrue: [ 0 ]
-		ifFalse: [ self highPassingCost ]!
+		ifFalse: [ HighPassingCost ]!
 
 position: aPoint
 
@@ -764,6 +791,10 @@ closestFood
 
 !Battlesnake.BoardTile methodsFor: 'path finding'!
 
+resetCachedPath: announcement
+
+	pathCache removeKey: announcement tile ifAbsent: []!
+
 simplePathTo: targetTile
 "
 	Find which of the x,y deltas is larger, and add nodes along that axis before adding nodes along the other axis.
@@ -798,10 +829,6 @@ simplePathTo: targetTile
 
 	^path!
 
-resetCachedPathTo: targetTile
-
-	pathCache at: targetTile put: nil!
-
 findPathTo: tileOrContent
 
 	| targetTile |
@@ -819,7 +846,7 @@ cachePath: newPath to: targetTile
 		].
 	
 	newPath do: [:eachTile |
-		eachTile when: TileStateChanged send: #resetCachedPathTo: to: self
+		eachTile when: TileStateChanged send: #resetCachedPath: to: self
 		].
 	
 	pathCache at: targetTile put: newPath.
@@ -1126,40 +1153,30 @@ stepCost
 target: aTile
 
 	target := aTile.
-	self updateHCost!
+	self updateCostToTarget!
 
-hCost
+costOfTravel
 
-	^hCost!
-
-targetDistance: distance
-"
-	distance is an Integer representing minimum number of steps to a target.
-"
-
-	hCost := distance * StepCost!
+	^ costOfTravel ifNil: [ self updateCostOfTravel ]!
 
 parentNode: aPathNode
 
 	parentNode == aPathNode ifTrue: [ ^ self ].
 	parentNode := aPathNode.
 	distanceFromStart := nil.
-	self updateGCost!
+	self updateCostFromStart!
 
 position
 
 	^ tile position!
 
+costToTarget
+
+	^costToTarget ifNil: [ self updateCostToTarget ]!
+
 tile: anObject
 
 	tile := anObject!
-
-gCost
-"
-	If it hasn't been calculated yet, determine gCost as the product of my distance from the start of the path
-	(the first node in the linked list) and a cost associated with a single step.
-"
-	^gCost ifNil: [ self updateGCost ]!
 
 distanceTo: anotherNode
 
@@ -1169,6 +1186,13 @@ distanceTo: anotherNode
 	"We can only make rectangular moves. If we were able to move diagonally, we'd have to use pythagorean theorem to calculate
 	the diagonal distances."
 	^ offset x + offset y!
+
+costFromStart
+"
+	If it hasn't been calculated yet, determine gCost as the product of my distance from the start of the path
+	(the first node in the linked list) and a cost associated with a single step.
+"
+	^costFromStart ifNil: [ self updateCostFromStart ]!
 
 distanceToTarget
 
@@ -1182,13 +1206,13 @@ target
 
 	^target!
 
-fCost
-
-	^ fCost ifNil: [ self updateFCost ]!
-
 tile
 
-	^tile! !
+	^tile!
+
+costOfRisk
+
+	^costOfRisk ifNil: [self updateCostOfRisk ]! !
 
 !Battlesnake.PathNode methodsFor: 'printing'!
 
@@ -1201,124 +1225,120 @@ printOn: aStream
 
 !Battlesnake.PathNode methodsFor: 'actions'!
 
-updateGCost
+updateCostFromStart
 "
 	If it hasn't been calculated yet, determine gCost as the product of my distance from the start of the path
 	(the first node in the linked list) and a cost associated with a single step.
 "
-	^ gCost := self distanceFromStart * StepCost!
+	^ costFromStart := self distanceFromStart * StepCost!
 
-updateHCost
+updateCostOfTravel
 
-	^ hCost := self distanceToTarget * StepCost!
+	^ costOfTravel := self costFromStart + self costToTarget + self costOfRisk!
+
+updateCostOfRisk
+"
+	costOfRisk is the probable cost of passing through the tile in N moves.
+	It is determined by the number of empty neighbours of the tile.
+	The smaller the number, the higher the risk will be.
+	It is also determined by the distance of snakes from the tile.
+	The closer a snake is, the higher the risk will be.
+"
+
+	| emptyNeighbours |
+	
+	emptyNeighbours := tile neighbours select: #isEmpty.
+	
+	costOfRisk := (4 - emptyNeighbours size) * RiskCost.
+	
+	tile board snakes do: [ :eachSnake |
+		eachSnake isEnemy ifTrue: [
+			costOfRisk := costOfRisk + (eachSnake head probabilityOfReaching: tile in: self distanceFromStart)
+			]
+		].
+	
+	^ costOfRisk!
 
 updateCosts
 
 	^ self
-		updateGCost;
-		updateHCost;
-		updateFCost!
+		updateCostFromStart;
+		updateCostToTarget;
+		updateCostOfRisk;
+		updateCostOfTravel!
 
-updateFCost
+updateCostToTarget
 
-	^ fCost := self gCost + self hCost! !
+	^ costToTarget := self distanceToTarget * StepCost! !
 
 !Battlesnake.PathNode methodsFor: 'path finding'!
 
 findPathToTarget
 "
-	Answer a collection of tiles leading to the targetTile. Do not include myself in the path.
-	OPEN - the set of nodes to be evaluated
-	CLOSED - set of nodes already evaluated
-	add the start node (representing myself) to the OPEN set
+	A modified version of the A* algorithm.
 "
-	| open closed nodesByTiles current currentNeighbours knownPath |
-		
-	(tile cachedPathTo: target) ifNotNil: [:cachedPath | ^ cachedPath ].
+
+	| remainingNodes visitedNodes nodesByTiles |
 	
-	open := SortedCollection sortBlock: [ :a :b | a fCost <= b fCost ].
-	closed := IdentitySet new.
-	nodesByTiles := IdentityDictionary new. "Keep a map between tiles and nodes so the nodes can be revisited."
+	(tile cachedPathTo: target) ifNotNil: [:cachedPath | ^cachedPath].
+	
+	remainingNodes := SortedCollection sortBlock: [:a :b | a costOfTravel <= b costOfTravel].
+	visitedNodes := IdentitySet new.
+	nodesByTiles := IdentityDictionary new.
 
 	nodesByTiles at: tile put: self.
-	open add: self.
-	
-	"
-	loop
-		current = node in OPEN with the lowest f_cost
-		remove current from OPEN
-		add current to CLOSED
-		
-	"
-	[open isEmpty] whileFalse: [
-		current := open removeFirst.
-		closed add: current.
-		"
-		if current is the target node
-			return
-		
-		"
-		knownPath := current tile cachedPathTo: target.
-		(knownPath notNil or: [current tile == target]) ifTrue: [
-			| path |
-			path := OrderedCollection new.
-			knownPath ifNotNil: [path addAll: knownPath reverse].			
-			[ current notNil ] whileTrue: [
-				path add: current.
-				current := current parentNode.
-				].
-			path := (path reverse collect: #tile)
-				removeFirst;	"That's me!!"
-				yourself.
-			^ tile cachePath: path to: target
-			].
-		"
-		for each neighbour of the current node
-			if neighbour is in CLOSED or neighbour is not traversable
-				skip to the next neighbour
-		"
-		currentNeighbours := current tile neighbours sorted: [ :a :b |
-			(a distanceTo: target) <= (b distanceTo: target)
-			].
-		
-		currentNeighbours do: [ :eachTile |
-			| node nodeInClosed |
-			node := nodesByTiles
-				at: eachTile
-				ifAbsentPut: [ PathNode on: eachTile target: target parentNode: current ].
+	remainingNodes add: self.
+
+	[remainingNodes isEmpty] whileFalse: [
+			| currentNode currentNeighbours knownPath |
+			currentNode := remainingNodes removeFirst.
+			visitedNodes add: currentNode.
 			
-			nodeInClosed := closed includes: node.
-			
-			(eachTile isTraversable not and: [nodeInClosed not]) ifTrue: [
-				closed add: node.
-				nodeInClosed := true].
-			
-			nodeInClosed ifFalse: [
-				"
-				if new path to neighbour is shorter or neighbour is not in OPEN
-					set fCost of neighbour
-					set parent of neighbour to current
-					if neighbour is not in OPEN
-						add neighbour to OPEN
-				"
-				| oldGCost newGCost nodeInOpen|
+			knownPath := currentNode tile cachedPathTo: target.
+			(knownPath notNil or: [currentNode tile == target]) ifTrue: [
+				^self backtrackPath: currentNode knownPath: knownPath].
 				
-				oldGCost := node gCost.
-				node updateCosts.
-				nodeInOpen := open includes: node.
-				nodeInOpen ifTrue: [ open reSort ].
-				
-				newGCost := node gCost.
-				(newGCost < oldGCost or: [ nodeInOpen not ]) ifTrue: [
-					node parentNode: current.
-					nodeInOpen ifFalse: [ open add: node ]
-					]
-				]
-			]
-		].
+			currentNeighbours := currentNode tile neighbours sorted: [:a :b |
+				(a distanceTo: target) <= (b distanceTo: target)].
+						
+			currentNeighbours do: [:eachTile |
+					| node processNode |
+					node := nodesByTiles
+						at: eachTile
+						ifAbsentPut: [PathNode on: eachTile target: target parentNode: currentNode].
+						
+					processNode := (visitedNodes includes: node) not.
+					(eachTile isTraversable not and: [processNode]) ifTrue: [
+							visitedNodes add: node.
+							processNode := false].
+						
+					processNode ifTrue: [
+							| oldCost newCost nodeInOpen |
+							oldCost := node costFromStart.
+							node updateCosts.
+							nodeInOpen := remainingNodes includes: node.
+							nodeInOpen ifTrue: [remainingNodes reSort].
+							newCost := node costFromStart.
+							(newCost < oldCost or: [nodeInOpen not]) ifTrue: [
+								node parentNode: currentNode.
+								nodeInOpen ifFalse: [remainingNodes add: node]]]]].
 
 	"If I got here there is no path to targetTile. Return nil."
-	^ nil! !
+	^nil!
+
+backtrackPath: endNode knownPath: knownPath
+
+	| path backTrack |
+	backTrack := endNode.
+	path := OrderedCollection new.
+	knownPath ifNotNil: [path addAll: knownPath reverse].
+	[backTrack notNil] whileTrue: 
+			[path add: backTrack.
+			backTrack := backTrack parentNode].
+	path := (path reverse collect: #tile)
+				removeFirst;
+				yourself.	"That's me!!"
+	^tile cachePath: path to: target! !
 
 !Battlesnake.PathNode methodsFor: 'initialize-release'!
 
@@ -1326,7 +1346,7 @@ initialize
 
 	super initialize.
 	
-	gCost := hCost := 0.! !
+	costFromStart := costToTarget := 0.! !
 
 
 !Battlesnake.Snake class methodsFor: 'instance creation'!
@@ -1478,6 +1498,14 @@ shouldRunFrom: anotherSnake
 
 	^ (self canHunt: anotherSnake) not!
 
+isMedusa
+
+	^ false!
+
+isEnemy
+
+	^ true!
+
 canHunt: anotherSnake
 
 	^ self power > anotherSnake power! !
@@ -1577,9 +1605,17 @@ taunt
 
 !Battlesnake.Medusa class methodsFor: 'accessing'!
 
+snake: aMedusa
+
+	snake := aMedusa!
+
 defaultSnakeName
 
-	^ 'Medusa'! !
+	^ 'Medusa'!
+
+snake
+
+	^snake! !
 
 
 !Battlesnake.Medusa methodsFor: 'accessing'!
@@ -1702,6 +1738,16 @@ bubbleShift
 		
 	
 	^ shift! !
+
+!Battlesnake.Medusa methodsFor: 'testing'!
+
+isMedusa
+
+	^ true!
+
+isEnemy
+
+	^ false! !
 
 !Battlesnake.Medusa methodsFor: 'actions'!
 
@@ -2314,7 +2360,7 @@ probabilityOfReaching: aTile in: numberOfMoves
 	
 	area := self areaWithinDistance: distance.
 	
-	^ (100 / area) rounded! !
+	^ (10 * StepCost / area) rounded! !
 
 !Battlesnake.Head methodsFor: 'accessing state'!
 
@@ -2424,5 +2470,9 @@ battlesnakeDistance
 
 
 #{Battlesnake.Directions} initialize!
+
+#{Battlesnake.HighPassingCost} initialize!
+
+#{Battlesnake.RiskCost} initialize!
 
 #{Battlesnake.StepCost} initialize!

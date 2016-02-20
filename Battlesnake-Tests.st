@@ -1,7 +1,7 @@
-'From VisualWorks®, 8.1 of 24 July, 2015 on 19 February, 2016 at 6:08:35 PM'!
+'From VisualWorks®, 8.1 of 24 July, 2015 on 19 February, 2016 at 11:55:01 PM'!
 
 
-CodeComponent create: #package named: 'Battlesnake-Tests'!"Package Battlesnake-Tests(0.6,jkott)="!
+CodeComponent create: #package named: 'Battlesnake-Tests'!"Package Battlesnake-Tests(0.8,jkott)="!
 
 
 CodeComponent type: #package named: 'Battlesnake-Tests' property: #prerequisiteParcels value: #(#('Battlesnake' '') #('SUnit' '') #('SUnitToo' ''))!
@@ -10,11 +10,11 @@ CodeComponent type: #package named: 'Battlesnake-Tests' property: #developmentPr
 
 CodeComponent type: #package named: 'Battlesnake-Tests' property: #prerequisiteDescriptions value: #(#(#name 'Battlesnake' #componentType #package) #(#name 'SUnit' #componentType #package) #(#name 'SUnitToo' #componentType #package))!
 
-Smalltalk.Battlesnake defineClass: #SnakeTest
+Smalltalk.Battlesnake defineClass: #BoardTest
 	superclass: #{SUnit.TestCase}
 	indexedType: #none
 	private: false
-	instanceVariableNames: 'board snake '
+	instanceVariableNames: ''
 	classInstanceVariableNames: ''
 	imports: ''
 	category: ''!
@@ -32,11 +32,11 @@ Smalltalk.Battlesnake defineClass: #GameTest
 			'
 	category: ''!
 
-Smalltalk.Battlesnake defineClass: #BoardTest
+Smalltalk.Battlesnake defineClass: #SnakeTest
 	superclass: #{SUnit.TestCase}
 	indexedType: #none
 	private: false
-	instanceVariableNames: ''
+	instanceVariableNames: 'board snake '
 	classInstanceVariableNames: ''
 	imports: ''
 	category: ''!
@@ -49,129 +49,6 @@ Smalltalk.Battlesnake defineClass: #TestObstacle
 	classInstanceVariableNames: ''
 	imports: ''
 	category: ''!
-
-Smalltalk.Battlesnake defineClass: #BattlesnakeTest
-	superclass: #{XProgramming.SUnit.TestCase}
-	indexedType: #none
-	private: false
-	instanceVariableNames: ''
-	classInstanceVariableNames: ''
-	imports: ''
-	category: ''!
-
-!Battlesnake.SnakeTest methodsFor: 'initialize-release'!
-
-setUp
-
-	super setUp.
-	board := Board defaultBoard!
-
-tearDown
-
-	board := nil.
-	^ super tearDown! !
-
-!Battlesnake.SnakeTest methodsFor: 'tests'!
-
-testMedusaBubble
-
-	| coordinates bubble bubbleShift |
-	coordinates := #(#(3 5) #(3 6) #(3 7) #(4 7)).
-	snake := Medusa on: board.
-	snake updateCoordinates: coordinates.
-
-	bubble := snake bubble.
-	self assert: bubble size > 0.
-	
-	bubbleShift := snake bubbleShift.
-	self assert: bubbleShift class == Point.
-	self assert: (bubbleShift x between: -1 and: 1).
-	self assert: (bubbleShift y between: -1 and: 1).!
-
-testSnakeBody
-
-	| coordinates head count tail |
-	coordinates := #(#(3 5) #(3 6) #(3 7) #(4 7)).
-	snake := Snake on: board.
-	snake updateCoordinates: coordinates.
-	head := snake head.
-	tail := snake tail.
-	
-	self assert: head notNil.
-	self assert: head class == Head.
-	self assert: head isSnakePart.
-	self assert: head isSnakeHead.
-	self assert: head isSnakeBody not.
-	self assert: head position = (coordinates first first @ coordinates first last).
-	self assert: snake power = coordinates size.
-
-	count := 0.	
-	snake segments with: coordinates do: [ :segment :coord |
-		count := count + 1.
-		self assert: segment position = (coord first @ coord last).
-		self assert: segment tailLength = (snake power - count).
-		].
-	
-	self assert: tail ~~ head.
-	self assert: tail position = (coordinates last first @ coordinates last last).
-	self assert: tail class == Body.
-	self assert: tail isSnakePart.
-	self assert: tail isSnakeBody.
-	self assert: tail isSnakeHead not.
-	self assert: tail tailLength = 0.!
-
-testNewSnake
-
-	| head |
-	snake := Snake on: board.
-
-	self assert: snake head isNil.
-	self assert: snake segments isEmpty.
-	self assert: snake tail isNil.
-	
-	snake updateCoordinates: #(#(3, 5)).
-	
-	head := snake head.
-	self assert: head notNil.
-	self assert: head class == Head.
-	self assert: head isSnakePart.
-	self assert: head isSnakeHead. 
-	self assert: head tile position = (3 @ 5).
-	self assert: snake power = 1.
-	self assert: snake tail == head.
-	self assert: head tailLength = 0!
-
-testSnakeFindFood
-
-	| game medusa target nextMove |
-	
-	game := Game exampleGame.
-	board := game board.
-	medusa := game medusa.
-	
-	medusa
-		resetBehaviors;
-		pushBehavior: #findFood.
-	
-	self assert: medusa currentBehavior = #findFood.
-	
-	nextMove := medusa behave.
-	self assert: nextMove = (0 @ -1).
-	self assert: medusa nextMoveDirection = #up.
-	self assert: medusa path notNil.
-	self assert: (target := medusa path last) hasFood.
-	medusa doMove.
-	
-	medusa addBehavior: #moveAlong.
-	medusa nextBehavior.
-	
-	[medusa tile == target] whileFalse: [
-		self assert: medusa currentBehavior = #moveAlong.
-		self assert: medusa nextMove battlesnakeDistance = 1.
-		medusa behave.
-		medusa doMove
-		]! !
-
 
 !Battlesnake.GameTest methodsFor: 'tests - HTTP'!
 
@@ -316,6 +193,127 @@ setUp
 	port := server listeners first port.! !
 
 
+!Battlesnake.SnakeTest methodsFor: 'initialize-release'!
+
+setUp
+
+	super setUp.
+	board := Board defaultBoard!
+
+tearDown
+
+	board := nil.
+	^ super tearDown! !
+
+!Battlesnake.SnakeTest methodsFor: 'tests'!
+
+testMedusaBubble
+
+	| coordinates bubble bubbleShift |
+	coordinates := #(#(3 5) #(3 6) #(3 7) #(4 7)).
+	snake := Medusa on: board.
+	snake updateCoordinates: coordinates.
+
+	bubble := snake bubble.
+	self assert: bubble size > 0.
+	
+	bubbleShift := snake bubbleShift.
+	self assert: bubbleShift class == Point.
+	self assert: (bubbleShift x between: -1 and: 1).
+	self assert: (bubbleShift y between: -1 and: 1).!
+
+testSnakeBody
+
+	| coordinates head count tail |
+	coordinates := #(#(3 5) #(3 6) #(3 7) #(4 7)).
+	snake := Snake on: board.
+	snake updateCoordinates: coordinates.
+	head := snake head.
+	tail := snake tail.
+	
+	self assert: head notNil.
+	self assert: head class == Head.
+	self assert: head isSnakePart.
+	self assert: head isSnakeHead.
+	self assert: head isSnakeBody not.
+	self assert: head position = (coordinates first first @ coordinates first last).
+	self assert: snake power = coordinates size.
+
+	count := 0.	
+	snake segments with: coordinates do: [ :segment :coord |
+		count := count + 1.
+		self assert: segment position = (coord first @ coord last).
+		self assert: segment tailLength = (snake power - count).
+		].
+	
+	self assert: tail ~~ head.
+	self assert: tail position = (coordinates last first @ coordinates last last).
+	self assert: tail class == Body.
+	self assert: tail isSnakePart.
+	self assert: tail isSnakeBody.
+	self assert: tail isSnakeHead not.
+	self assert: tail tailLength = 0.!
+
+testNewSnake
+
+	| head |
+	snake := Snake on: board.
+
+	self assert: snake head isNil.
+	self assert: snake segments isEmpty.
+	self assert: snake tail isNil.
+	
+	snake updateCoordinates: #(#(3, 5)).
+	
+	head := snake head.
+	self assert: head notNil.
+	self assert: head class == Head.
+	self assert: head isSnakePart.
+	self assert: head isSnakeHead. 
+	self assert: head tile position = (3 @ 5).
+	self assert: snake power = 1.
+	self assert: snake tail == head.
+	self assert: head tailLength = 0!
+
+testSnakeFindFood
+
+	| game medusa target nextMove |
+	
+	game := Game exampleGame.
+	board := game board.
+	medusa := game medusa.
+	
+	medusa
+		resetBehaviors;
+		pushBehavior: #findFood.
+	
+	self assert: medusa currentBehavior = #findFood.
+	
+	nextMove := medusa behave.
+	self assert: nextMove = (0 @ -1).
+	self assert: medusa nextMoveDirection = #up.
+	self assert: medusa path notNil.
+	self assert: (target := medusa path last) hasFood.
+	medusa doMove.
+	
+	medusa addBehavior: #moveAlong.
+	medusa nextBehavior.
+	
+	[medusa tile == target] whileFalse: [
+		self assert: medusa currentBehavior = #moveAlong.
+		self assert: medusa nextMove battlesnakeDistance = 1.
+		medusa behave.
+		medusa doMove
+		]! !
+
+
+!Battlesnake.TestObstacle methodsFor: 'accessing state'!
+
+stateDescription
+	
+	^ 'obstacle'! !
+
+
 !Battlesnake.BoardTest methodsFor: 'testing'!
 
 testExampleBoard
@@ -355,13 +353,16 @@ testBestPathWithObstacles
 	self assert: time < 100 milliseconds.
 	self assert: path last == board bottomRight.
 
-	path := board topRight findPathTo: board bottomRight.
+	time := [path := board topRight findPathTo: board bottomRight] timeToRun.
+	self assert: time < 100 milliseconds.
 	self assert: path last == board bottomRight.
 
-	path := board topRight findPathTo: board bottomLeft.
+	time := [path := board topRight findPathTo: board bottomLeft] timeToRun.
+	self assert: time < 100 milliseconds.
 	self assert: path last == board bottomLeft.
 
-	path := board topLeft findPathTo: board bottomLeft.
+	time := [path := board topLeft findPathTo: board bottomLeft] timeToRun.
+	self assert: time < 100 milliseconds.
 	self assert: path last == board bottomLeft.!
 
 testInsideNeighbours
@@ -398,7 +399,9 @@ testBestPath
 	self assert: path size = (board height - 1).
 	self assert: path last == board bottomLeft.
 	
-	path := board topLeft findPathTo: board bottomRight.
+	time := [path := board topLeft findPathTo: board bottomRight] timeToRun.
+	"The following assertion will fail if the above code is interrupted by a breakpoint etc."
+	self assert: time < 100 milliseconds.
 	self assert: path notNil.
 	self assert: path size = (board height + board width - 2).
 	self assert: path last == board bottomRight.
@@ -485,53 +488,6 @@ testSimplePath
 			]! !
 
 
-!Battlesnake.TestObstacle methodsFor: 'accessing state'!
-
-stateDescription
-	
-	^ 'obstacle'! !
-
-
-!Battlesnake.BattlesnakeTest methodsFor: 'tests'!
-
-testJakeSnake! !
-
-!Battlesnake.BattlesnakeTest methodsFor: 'running'!
-
-startData
-
-	^ Dictionary new
-		at: #game_id put: 'hairy-cheese';
-		at: #width put: 20;
-		at: #height put: 20;
-		yourself!
-
-boardStateData
-	"
-	https://github.com/sendwithus/battlesnake-legacy#board-state-objects
-	self new boardStateData
-"
-	" Start with empty board."
-
-	| board |
-	board := Board width: 20 height: 20.
-
-	" Put some food on the grid. "
-	#(#(2 3) #(3 7) #(3 19) #(5 5) #(12 4) #(16 13))
-		do: [:coordinates | board putFoodAt: coordinates first @ coordinates last].
-
-	" Put some snakes on the grid. "
-	board addSnake: (Snake exampleOn: board).
-	board addSnake: (Snake exampleNoodlezOn: board).
-	^board!
-
-runTest: aReceiver
-
-	| startData |
-	
-	startData := Dictionary new! !
-
-
 !Battlesnake.Board class methodsFor: 'instance creation'!
 
 exampleBoard
@@ -578,16 +534,6 @@ exampleGame
 		medusa: (board snakes at: 'Medusa');
 		turn: 0;
 		yourself! !
-
-
-!Battlesnake.Food class methodsFor: 'instance creation'!
-
-exampleCoordinates
-"
-	Return an Array of Points with the coordinates of food.
-"
-
-	^ #(#(2 2) #(13 5) #(16 12) #(7 16 ) #(16 16)) collect: [ :each | each first @ each last]! !
 
 
 !Battlesnake.Snake class methodsFor: 'example snakes'!
@@ -656,4 +602,14 @@ exampleSnakes: aBoard
 		add: (self exampleEnemy1_on: aBoard);
 		add: (self exampleEnemy2_on: aBoard);
 		yourself! !
+
+
+!Battlesnake.Food class methodsFor: 'instance creation'!
+
+exampleCoordinates
+"
+	Return an Array of Points with the coordinates of food.
+"
+
+	^ #(#(2 2) #(13 5) #(16 12) #(7 16 ) #(16 16)) collect: [ :each | each first @ each last]! !
 
