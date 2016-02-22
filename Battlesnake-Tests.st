@@ -1,7 +1,7 @@
-'From VisualWorks®, 8.1 of 24 July, 2015 on 19 February, 2016 at 11:55:01 PM'!
+'From VisualWorks®, 8.1 of 24 July, 2015 on 21 February, 2016 at 6:01:22 PM'!
 
 
-CodeComponent create: #package named: 'Battlesnake-Tests'!"Package Battlesnake-Tests(0.8,jkott)="!
+CodeComponent create: #package named: 'Battlesnake-Tests'!"Package Battlesnake-Tests(1.0 - 2016 Competition,jkott)="!
 
 
 CodeComponent type: #package named: 'Battlesnake-Tests' property: #prerequisiteParcels value: #(#('Battlesnake' '') #('SUnit' '') #('SUnitToo' ''))!
